@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,6 +50,11 @@ public class SimpleAssembler implements Assembler {
 				.map(this::makeOutputCode) // note how we use an instance method in the same class
 				.collect(Collectors.toList());
 		
+		List<String> outputData = lists.get(false).stream()
+				.map(line -> line.split("\\s+"))
+				.map(this::makeOutputData)
+				.collect(Collectors.toList());
+		
 		try (PrintWriter output = new PrintWriter(outputFileName)){
 			for(String s : outputCode) output.println(s);
 			output.println(-1); // signal for the "DATA" separating code and data
@@ -57,6 +63,19 @@ public class SimpleAssembler implements Assembler {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	public static void main(String[] args) {
+		StringBuilder error = new StringBuilder();
+		System.out.println("Enter the name of the file without extension: ");
+		try (Scanner keyboard = new Scanner(System.in)) { 
+			String filename = keyboard.nextLine();
+			int i = new SimpleAssembler().assemble(filename + ".pasm", 
+					filename + ".pexe", error);
+			System.out.println("result = " + i);
 		}
 	}
 }
