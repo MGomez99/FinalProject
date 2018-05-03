@@ -1,9 +1,9 @@
 package projectview;
 
-import java.util.Observable;
 import project.MachineModel;
 
 import javax.swing.*;
+import java.util.Observable;
 
 @SuppressWarnings("deprecation")
 public class ViewMediator extends Observable {

@@ -308,9 +308,11 @@ public class MachineModel {
         cpu.instructionPointer = currentJob.getCurrentIP();
         cpu.memoryBase = currentJob.getStartmemoryIndex();
     }
-    public void clearJob(){
+
+    public void clearJob() {
 
     }
+
     public void setCurrentAcc() {
         currentJob.setCurrentAcc(cpu.accumulator);
     }

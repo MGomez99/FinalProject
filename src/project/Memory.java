@@ -34,13 +34,14 @@ public class Memory {
         }
         changedIndex = -1;
     }
-    public int getOp(int i){
-        return 1; @// TODO: 5/3/2018
+
+    public int getOp(int i) {
+        return 1; // TODO: 5/3/2018
     }
-    public int getArg(int i){
-        return 1; @// TODO: 5/3/2018  
+
+    public int getArg(int i) {
+        return 1; // TODO: 5/3/2018
     }
-    
 
 
 }
