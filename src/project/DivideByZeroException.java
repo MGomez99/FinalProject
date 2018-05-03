@@ -7,9 +7,11 @@ public class DivideByZeroException extends RuntimeException {
     public DivideByZeroException() {
         super();
     }
+
     /**
      * Preferred constructor that sets the inherited message field
      * of the exception object
+     *
      * @param arg0 message passed by the exception that was thrown
      */
     public DivideByZeroException(String arg0) {
