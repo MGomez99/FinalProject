@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 public class MachineModel {
     public final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap();
-    Job[] jobs = new Job[2]; //IS THIS PRIVATE?
+    public Job[] jobs = new Job[2]; //IS THIS PRIVATE?
     private CPU cpu = new CPU();
     private Memory memory = new Memory();
     private HaltCallback callback;
@@ -308,7 +308,9 @@ public class MachineModel {
         cpu.instructionPointer = currentJob.getCurrentIP();
         cpu.memoryBase = currentJob.getStartmemoryIndex();
     }
+    public void clearJob(){
 
+    }
     public void setCurrentAcc() {
         currentJob.setCurrentAcc(cpu.accumulator);
     }

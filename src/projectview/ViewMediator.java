@@ -1,10 +1,11 @@
 package projectview;
 
-import javafx.beans.Observable;
+import java.util.Observable;
 import project.MachineModel;
 
 import javax.swing.*;
 
+@SuppressWarnings("deprecation")
 public class ViewMediator extends Observable {
     private MachineModel model;
     private JFrame frame;
@@ -24,5 +25,6 @@ public class ViewMediator extends Observable {
     public JFrame gtFrame() {
         return this.frame;
     }
+
 
 }
