@@ -306,6 +306,7 @@ public class MachineModel{
     public Instruction get(int index) {
     	return INSTRUCTIONS.get(index);
     }
+    
     Job[] jobs = new Job[2]; //IS THIS PRIVATE?
     private Job currentJob;
 
