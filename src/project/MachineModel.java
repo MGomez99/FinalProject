@@ -291,7 +291,7 @@ public class MachineModel{
 		this.cpu.instructionPointer = instructionPointer;
 	}
 
-	int[] getData() {
+	public int[] getData() {
     	return memory.getDataArray();
     }
     

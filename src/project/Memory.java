@@ -11,9 +11,7 @@ public class Memory {
     private int changedIndex = -1;
 
 
-
-
-    int[] getDataArray() {
+    public int[] getDataArray() {
         return data;
     }
 
@@ -26,11 +24,16 @@ public class Memory {
         changedIndex = index;
     }
 
-    public int getChangedIndex(){
+    public int getChangedIndex() {
         return this.changedIndex;
     }
-    
 
+    public void clearData(int start, int end) {
+        for (int i = start; i < end; i++) {
+            data[i] = 0;
+        }
+        changedIndex = -1;
+    }
 
 
 }
