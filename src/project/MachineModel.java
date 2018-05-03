@@ -295,4 +295,16 @@ public class MachineModel{
     public Instruction get(int index) {
     	return INSTRUCTIONS.get(index);
     }
+    Job[] jobs = new Job[2]; //IS THIS PRIVATE?
+    private Job currentJob;
+
+    public Job getCurrentJob() {
+        return this.currentJob;
+    }
+    public void setJob(int i){
+        if(i != 0 || i != 1){ throw new IllegalArgumentException(); }
+        //@TODO Actually set shit??
+    }
+
+
 }
