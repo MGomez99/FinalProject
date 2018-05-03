@@ -3,8 +3,13 @@ package project;
 
 public class Memory {
     public static final int DATA_SIZE = 2048;
-
     private int[] data = new int[DATA_SIZE];
+
+    /***
+     * Put Part 1 fields here for ordering, before the following fields
+     ***/
+    private int changedIndex = -1;
+
 
 
 
@@ -18,6 +23,14 @@ public class Memory {
 
     public void setData(int index, int value) {
         data[index] = value;
+        changedIndex = index;
     }
+
+    public int getChangedIndex(){
+        return this.changedIndex;
+    }
+    
+
+
 
 }

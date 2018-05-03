@@ -2,6 +2,7 @@ package project;
 
 import java.util.Map;
 import java.util.TreeMap;
+import projectview.States;
 
 public class MachineModel{
     private class CPU{
@@ -262,6 +263,16 @@ public class MachineModel{
         INSTRUCTIONS.put(0x1F, arg -> {
         	callback.halt();
         });
+        jobs[0] = new Job();
+        jobs[1] = new Job();
+        currentJob = jobs[0];
+        jobs[0].setStartcodeIndex(0);
+        jobs[0].setStartmemoryIndex(0);
+        jobs[1].setStartcodeIndex(Memory.CODE_MAX/4);
+        jobs[1].setStartmemoryIndex(Memory.DATA_SIZE/4);
+        jobs[0].setCurrentState(States.NOTHING_LOADED);
+        jobs[1].setCurrentState(States.NOTHING_LOADED);
+
     }
 	
 	public int getAccumulator() {
@@ -303,8 +314,18 @@ public class MachineModel{
     }
     public void setJob(int i){
         if(i != 0 || i != 1){ throw new IllegalArgumentException(); }
-        //@TODO Actually set shit??
+        currentJob = jobs[i];
+        cpu.accumulator = currentJob.getCurrentAcc();
+        cpu.instructionPointer = currentJob.getCurrentIP();
+        cpu.memoryBase = currentJob.getStartmemoryIndex();
     }
+    public void setCurrentAcc(){
+        currentJob.setCurrentAcc(cpu.accumulator);
+    }
+    public void setCurrentIP(){
+        currentJob.setCurrentIP(cpu.instructionPointer);
+    }
+
 
 
 }
