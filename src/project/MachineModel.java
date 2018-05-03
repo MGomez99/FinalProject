@@ -81,6 +81,7 @@ public class MachineModel{
         INSTRUCTIONS.put(5, arg -> {
         	int val = memory.getData(cpu.memoryBase + arg);
         	memory.setData(cpu.memoryBase + val, cpu.accumulator);
+        	cpu.incrementIP(1);
         });
         
         //JMPR
@@ -229,7 +230,7 @@ public class MachineModel{
         	if(cpu.accumulator != 0) {
         		cpu.accumulator = 0;
         	}
-        	if(cpu.accumulator == 0) {
+        	else {
         		cpu.accumulator = 1;
         	}
         	cpu.incrementIP(1);
@@ -237,7 +238,7 @@ public class MachineModel{
         
         //CMPL
         INSTRUCTIONS.put(0x1B, arg -> {
-        	if(cpu.memoryBase + arg < 0) {
+        	if(getData(cpu.memoryBase + arg) < 0) {
         		cpu.accumulator = 1;
         	}
         	else {
@@ -248,7 +249,7 @@ public class MachineModel{
         
         //CMPZ
         INSTRUCTIONS.put(0x1C, arg -> {
-        	if( cpu.memoryBase + arg == 0) {
+        	if(getData(cpu.memoryBase + arg) == 0) {
         		cpu.accumulator = 1;
         	}
         	else {
@@ -262,8 +263,24 @@ public class MachineModel{
         	callback.halt();
         });
     }
-    
-    int[] getData() {
+	
+	public int getAccumulator() {
+		return cpu.accumulator;
+	}
+
+	public void setAccumulator(int accumulator) {
+		this.cpu.accumulator = accumulator;
+	}
+
+	public int getInstructionPointer() {
+		return cpu.instructionPointer;
+	}
+
+	public void setInstructionPointer(int instructionPointer) {
+		this.cpu.instructionPointer = instructionPointer;
+	}
+
+	int[] getData() {
     	return memory.getDataArray();
     }
     
