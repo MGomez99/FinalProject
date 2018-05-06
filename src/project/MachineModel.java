@@ -310,7 +310,7 @@ public class MachineModel {
     }
 
     public void clearJob() {
-
+    //@ TODO: 5/5/2018
     }
 
     public void setCurrentAcc() {
@@ -319,6 +319,22 @@ public class MachineModel {
 
     public void setCurrentIP() {
         currentJob.setCurrentIP(cpu.instructionPointer);
+    }
+
+    public int[] getCode() {
+        return memory.getCode();
+    }
+
+    public int getOp(int i) {
+        return memory.getOp(i);
+    }
+
+    public int getArg(int i) {
+        return memory.getArg(i);
+    }
+
+    public void setCode(int index, int op, int arg) {
+        memory.setCode(index, op, arg);
     }
 
     private class CPU {

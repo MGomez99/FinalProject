@@ -3,13 +3,35 @@ package project;
 
 public class Memory {
     public static final int DATA_SIZE = 2048;
+    public static final int CODE_MAX = 2048;
     private int[] data = new int[DATA_SIZE];
+    private int[] code = new int[CODE_MAX];
 
-    /***
-     * Put Part 1 fields here for ordering, before the following fields
-     ***/
     private int changedIndex = -1;
 
+    int[] getCode() {
+        return code;
+    }
+
+    public int getOp(int i) {
+        return code[2 * i];
+    }
+
+    public int getArg(int i) {
+        return code[2 * i + 1];
+    }
+
+    public void clear(int start, int end) {
+        for (int i = start; i < end; i++) {
+            code[2 * i] = 0;
+            code[2 * i + 1] = 0;
+        }
+    }
+
+    public void setCode(int index, int op, int arg) {
+        code[2 * index] = op;
+        code[2 * index + 1] = arg;
+    }
 
     public int[] getDataArray() {
         return data;
@@ -33,14 +55,6 @@ public class Memory {
             data[i] = 0;
         }
         changedIndex = -1;
-    }
-
-    public int getOp(int i) {
-        return 1; // TODO: 5/3/2018
-    }
-
-    public int getArg(int i) {
-        return 1; // TODO: 5/3/2018
     }
 
 
