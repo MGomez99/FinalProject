@@ -25,7 +25,9 @@ public class Loader {
                     codeSize++;
                 }
                 if(!incode){
+                    int address = parser.nextInt();
                     int value = parser.nextInt();
+                    model.setData(memoryOffset + address, value);
                     //Write the address and value to memory using model.setData(address+memoryOffset, value). The memory location MUST be offset
                     //Control-F that ^^^^^ Up to (iii) case
 
