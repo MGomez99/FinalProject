@@ -310,7 +310,27 @@ public class MachineModel {
     }
 
     public void clearJob() {
-    //@ TODO: 5/5/2018
+        memory.clearData(currentJob.getStartmemoryIndex(), currentJob.getStartmemoryIndex() + Memory.DATA_SIZE / 2);
+        memory.clearCode(currentJob.getStartcodeIndex(), currentJob.getStartcodeIndex() + currentJob.getCodeSize());
+        setAccumulator(0);
+        setInstructionPointer(currentJob.getStartcodeIndex());
+        currentJob.reset();
+    }
+
+    public void step() {
+        try {
+            int ip = getInstructionPointer();
+            if (!(ip >= currentJob.getStartcodeIndex()) && !(ip < currentJob.getStartcodeIndex() + currentJob.getCodeSize())
+            {
+                throw new CodeAccessException(); //TODO MAYBE WRONG
+            }
+            get(getOp(ip)).execute(getArg(ip));
+
+        } catch (Exception e) {
+            callback.halt();
+            throw e;
+
+        }
     }
 
     public void setCurrentAcc() {

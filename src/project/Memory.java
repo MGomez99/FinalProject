@@ -21,7 +21,7 @@ public class Memory {
         return code[2 * i + 1];
     }
 
-    public void clear(int start, int end) {
+    public void clearCode(int start, int end) {
         for (int i = start; i < end; i++) {
             code[2 * i] = 0;
             code[2 * i + 1] = 0;
