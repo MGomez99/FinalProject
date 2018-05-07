@@ -15,19 +15,19 @@ public class Loader {
                 String line1 = input.nextLine();
                 String line2 = input.nextLine();
                 Scanner parser = new Scanner(line1 + " " + line2);
-                if(incode && parser.nextInt() == -1){
+                int i = parser.nextInt();
+                if(incode && i == -1){
                     incode = false;
                 }
-                int nextint = parser.nextInt();
-                if(incode && nextint != -1){
+                
+                if(incode && i != -1){
                     int arg = parser.nextInt();
-                    model.setCode(codeOffset+codeSize, nextint, arg); //@TODO This might be wrong
+                    model.setCode(codeOffset+codeSize, i, arg); //@TODO This might be wrong
                     codeSize++;
                 }
                 if(!incode){
-                    int address = parser.nextInt();
                     int value = parser.nextInt();
-                    model.setData(memoryOffset + address, value);
+                    model.setData(memoryOffset + i, value);
                     //Write the address and value to memory using model.setData(address+memoryOffset, value). The memory location MUST be offset
                     //Control-F that ^^^^^ Up to (iii) case
 
