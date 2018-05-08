@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Observer;
+import java.util.Observable;
 
 public class MenuBarBuilder implements Observer {
     private JMenuItem assemble = new JMenuItem("Assemble Source...");
@@ -45,6 +46,42 @@ public class MenuBarBuilder implements Observer {
         return menu;
     }
     JMenu createExecuteMenu(){
-        //TODO PART 5
+        JMenu menu = new JMenu("Execute");
+        menu.setMnemonic(KeyEvent.VK_X);
+
+        go.setMnemonic(KeyEvent.VK_G);
+        go.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+        go.addActionListener(e -> view.execute());
+        menu.add(go);
+
+        return menu;
+    }
+
+    JMenu createJobsMenu() {
+        JMenu menu = new JMenu("Change Job");
+        menu.setMnemonic(KeyEvent.VK_J);
+
+        job0.setMnemonic(KeyEvent.VK_0);
+        job0.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_0, ActionEvent.CTRL_MASK));
+        job0.addActionListener(e -> view.setJob(0));
+        menu.add(job0);
+
+        job1.setMnemonic(KeyEvent.VK_1);
+        job1.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_1, ActionEvent.CTRL_MASK));
+        job1.addActionListener(e -> view.setJob(1));
+        menu.add(job1);
+        return menu;
+    }
+
+    public void update(Observable arg0, Object arg1) {
+        assemble.setEnabled(view.getCurrentState().getAssembleFileActive());
+        load.setEnabled(view.getCurrentState().getLoadFileActive());
+        go.setEnabled(view.getCurrentState().getStepActive());
+        job0.setEnabled(view.getCurrentState().getChangeJobActive());
+        job1.setEnabled(view.getCurrentState().getChangeJobActive());
+
     }
 }

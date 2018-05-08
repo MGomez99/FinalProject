@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 
-@SuppressWarnings({"deprecation", "Duplicates"})
+@SuppressWarnings({"Duplicates"})
 
 public class ViewMediator extends Observable {
     private MachineModel model;
@@ -17,9 +17,9 @@ public class ViewMediator extends Observable {
     private MemoryViewPanel memoryViewPanel1;
     private MemoryViewPanel memoryViewPanel2;
     private MemoryViewPanel memoryViewPanel3;
-    //private ControlPanel controlPanel;
-    //private ProcessorViewPanel processorPanel;
-    //private MenuBarBuilder menuBuilder;
+    private ControlPanel controlPanel;
+    private ProcessorViewPanel processorPanel;
+    private MenuBarBuilder menuBuilder;
     private JFrame frame;
     private FilesManager filesManager;
     private Animator animator;
@@ -127,6 +127,21 @@ public class ViewMediator extends Observable {
         return this.frame;
     }
 
+    // CORRECTED LATER IN THE EVENING
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                ViewMediator mediator = new ViewMediator();
+                MachineModel model = new MachineModel(
+                        true,
+                        () -> mediator.setCurrentState(States.PROGRAM_HALTED)
+                );
+                mediator.setModel(model);
+                mediator.createAndShowGUI();
+            }
+        });
+    }
+
     private void createAndShowGUI(){
         this.animator = new Animator(this);
         this.filesManager = new FilesManager(this);
@@ -135,9 +150,9 @@ public class ViewMediator extends Observable {
         this.memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
         this.memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE/2);
         this.memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-        //this.controlPanel = new ControlPanel(this);
-        //this.processorPanel = new ProcessorViewPanel(this, model);
-        //this.menuBuilder = new MenuBarBuilder(this);
+        this.controlPanel = new ControlPanel(this);
+        this.processorPanel = new ProcessorViewPanel(this, model);
+        this.menuBuilder = new MenuBarBuilder(this);
         this.frame = new JFrame("Simulator");
 
         Container content = frame.getContentPane();
@@ -151,28 +166,28 @@ public class ViewMediator extends Observable {
         center.add(memoryViewPanel2.createMemoryDisplay());
         center.add(memoryViewPanel3.createMemoryDisplay());
         frame.add(center, BorderLayout.CENTER);
+        frame.add(controlPanel.createControlDisplay(), BorderLayout.PAGE_END);
+        frame.add(processorPanel.createProcessorDisplay(), BorderLayout.PAGE_START);
+
+        JMenuBar bar = new JMenuBar();
+        frame.setJMenuBar(bar);
+        bar.add(menuBuilder.createFileMenu());
+        bar.add(menuBuilder.createExecuteMenu());
+        bar.add(menuBuilder.createJobsMenu());
 
         //return HERE for the other GUI components.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(WindowListenerFactory.
+                windowClosingFactory(e -> exit()));
+        model.setCurrentState(States.NOTHING_LOADED);
+        model.getCurrentState().enter();
+        setChanged();
+        notifyObservers();
+        animator.start();
         // return HERE for other setup details
         frame.setVisible(true);
 
 
-    }
-
-    // CORRECTED LATER IN THE EVENING
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                ViewMediator mediator = new ViewMediator();
-                MachineModel model = new MachineModel(
-                        //true,
-                        //() -> mediator.setCurrentState(States.PROGRAM_HALTED)
-                );
-                mediator.setModel(model);
-                mediator.createAndShowGUI();
-            }
-        });
     }
 
     States getCurrentState(){ return model.getCurrentState();}

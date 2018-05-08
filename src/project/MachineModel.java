@@ -246,6 +246,12 @@ public class MachineModel {
             cpu.incrementIP(1);
         });
 
+        //JUMPN
+        INSTRUCTIONS.put(29, arg -> {
+            int arg1 = memory.getData(cpu.memoryBase + arg);
+            cpu.instructionPointer = currentJob.getStartcodeIndex() + arg1;
+        });
+
         //HALT
         INSTRUCTIONS.put(0x1F, arg -> {
             callback.halt();
@@ -379,6 +385,11 @@ public class MachineModel {
     public States getCurrentState() { return currentJob.getCurrentState();}
 
     public void setCurrentState(States currentState){ currentJob.setCurrentState(currentState);}
+
+    public int getMemoryBase() {
+        return cpu.memoryBase;
+    }
+
 
 
 
