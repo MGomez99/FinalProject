@@ -22,7 +22,7 @@ public class FullAssembler implements Assembler {
 				if(!temp.trim().equals("DATA")) {
 					throw new Exception();
 				}
-				if(temp == "") {
+				if(temp.equals("")) {
 					throw new Exception();
 				}
 				else {
