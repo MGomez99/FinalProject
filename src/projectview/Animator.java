@@ -2,11 +2,11 @@ package projectview;
 
 import javax.swing.*;
 
-public class Animator {
-    static final int TICK = 500;
-    boolean autoStepOn = false;
-    Timer timer;
-    ViewMediator view;
+class Animator {
+    private static final int TICK = 500;
+    private boolean autoStepOn = false;
+    private Timer timer;
+    private ViewMediator view;
 
     public Animator(ViewMediator view) {
         this.view = view;

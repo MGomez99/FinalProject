@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ControlPanel implements Observer {
+class ControlPanel implements Observer {
     private JTextField stepButton = new JTextField("Step");
     private JTextField clearButton = new JTextField("Clear");
     private JTextField runButton = new JTextField("Run/Pause");

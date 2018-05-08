@@ -20,8 +20,8 @@ public class Loader {
                 if(incode && i == -1){
                     incode = false;
                 }
-                
-                if(incode && i != -1){
+
+                if (incode) {
                     int arg = parser.nextInt();
                     model.setCode(codeOffset+codeSize, i, arg); //@TODO This might be wrong
                     codeSize++;

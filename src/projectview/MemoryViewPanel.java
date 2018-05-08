@@ -21,15 +21,13 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import project.MachineModel;
-import project.Loader;
 
-public class MemoryViewPanel implements Observer {
-    JTextField[] dataHex;
-    JTextField[] dataDecimal;
-    int lower = -1;
-    int upper = -1;
-    int previousColor = -1;
+class MemoryViewPanel implements Observer {
+    private JTextField[] dataHex;
+    private JTextField[] dataDecimal;
+    private int lower = -1;
+    private int upper = -1;
+    private int previousColor = -1;
     private MachineModel model;
     private JScrollPane scroller;
 

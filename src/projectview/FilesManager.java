@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.Properties;
 @SuppressWarnings("Duplicates")
-public class FilesManager {
+class FilesManager {
 
     private ViewMediator view;
 
@@ -57,7 +57,7 @@ public class FilesManager {
         defaultDir = defaultDir.substring(0, lastSlash + 1);
     }
 
-    void loadPropertiesFile() {
+    private void loadPropertiesFile() {
         try { // load properties file "propertyfile.txt", if it exists
             properties = new Properties();
             properties.load(new FileInputStream("propertyfile.txt"));

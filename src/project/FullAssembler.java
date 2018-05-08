@@ -2,7 +2,6 @@ package project;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -97,23 +96,26 @@ public class FullAssembler implements Assembler {
 					}
 				}
 				try{
-				int arg = Integer.parseInt(parts[1], 16);
+                    int arg = Integer.parseInt(parts[1], 16);
 				} catch(NumberFormatException b) {
 					error.append("\nError on line " + (lineNumber) + ": argument is not a hex number");
 				}
 			}
 			lineNumber += 1; //This is to account for the "DATA" LINE
+
             for (String s : dataLines) {
                 String[] parts = s.trim().split("\\s+");
-                //Not in hex
+
                 try {
                     int address = Integer.parseInt(parts[0], 16);
                     int value = Integer.parseInt(parts[1], 16);
                 } catch (NumberFormatException e) {
                     error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
                 }
+                lineNumber++;
 			}
             if (error.length() == 0) {
+
                 SimpleAssembler noError = new SimpleAssembler();
                 return noError.assemble(inputFileName, outputFileName, error);
             } else {
@@ -123,7 +125,7 @@ public class FullAssembler implements Assembler {
 
 		}
 		catch (FileNotFoundException e) {
-			error.append("\nError: Unable to write the assembled program to the output file");
+            error.append("\nUnable to open the source file)");
 			return -1;
 		}
 

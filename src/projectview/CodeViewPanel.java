@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings("ALL")
 public class CodeViewPanel implements Observer {
     private MachineModel model;
     private JScrollPane scroller;
@@ -24,6 +25,7 @@ public class CodeViewPanel implements Observer {
         this.model = mdl;
         gui.addObserver(this);
     }
+
     public JComponent createCodeDisplay(){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -57,6 +59,7 @@ public class CodeViewPanel implements Observer {
         return panel;
 
     }
+
     @Override
     public void update(Observable arg0, Object arg1) {
         if(arg1 != null && arg1.equals("Load Code")) {
@@ -78,8 +81,7 @@ public class CodeViewPanel implements Observer {
                 if(model == null) {
                     codeHex[i].setText("");
                     codeDecimal[i].setText("");
-                }
-                else {
+                } else {
                     codeHex[i].setText(model.getHex(i));
                     codeDecimal[i].setText(model.getDecimal(i));
                 }
@@ -110,6 +112,7 @@ public class CodeViewPanel implements Observer {
             }
         }
     }
+
     public static void main(String[] args) {
         ViewMediator view = new ViewMediator();
         MachineModel model = new MachineModel();

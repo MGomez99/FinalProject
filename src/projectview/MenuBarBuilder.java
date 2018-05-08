@@ -2,12 +2,11 @@ package projectview;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Observer;
 import java.util.Observable;
 
-public class MenuBarBuilder implements Observer {
+class MenuBarBuilder implements Observer {
     private JMenuItem assemble = new JMenuItem("Assemble Source...");
     private JMenuItem load = new JMenuItem("Load Program...");
     private JMenuItem exit = new JMenuItem("Exit");

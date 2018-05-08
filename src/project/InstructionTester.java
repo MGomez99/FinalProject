@@ -7,10 +7,10 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class InstructionTester {
-    MachineModel machine = new MachineModel();
-    int[] dataCopy = new int[Memory.DATA_SIZE];
-    int accInit;
-    int ipInit;
+    private MachineModel machine = new MachineModel();
+    private int[] dataCopy = new int[Memory.DATA_SIZE];
+    private int accInit;
+    private int ipInit;
 
     @Before
     public void setup() {

@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class MachineModel {
-    public final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap();
-    public Job[] jobs = new Job[2]; //IS THIS PRIVATE?
+    private final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap();
+    private Job[] jobs = new Job[2]; //IS THIS PRIVATE?
     private CPU cpu = new CPU();
     private Memory memory = new Memory();
     private HaltCallback callback;
-    private boolean withGUI;
     private Job currentJob;
+    private boolean withGUI;
 
     public MachineModel() {
         this(false, null);
@@ -57,8 +57,7 @@ public class MachineModel {
 
         //LOD
         INSTRUCTIONS.put(2, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            cpu.accumulator = arg1;
+            cpu.accumulator = memory.getData(cpu.memoryBase + arg);
             cpu.incrementIP(1);
         });
 
@@ -305,7 +304,7 @@ public class MachineModel {
     }
 
     public void setJob(int i) {
-        if (i != 0 || i != 1) {
+        if (i != 0 && i != 1) {
             throw new IllegalArgumentException();
         }
         currentJob = jobs[i];
@@ -350,22 +349,22 @@ public class MachineModel {
         return memory.getCode();
     }
 
-    public int getOp(int i) {
+    int getOp(int i) {
         return memory.getOp(i);
     }
 
-    public int getArg(int i) {
+    int getArg(int i) {
         return memory.getArg(i);
     }
 
-    public void setCode(int index, int op, int arg) {
+    void setCode(int index, int op, int arg) {
         memory.setCode(index, op, arg);
     }
 
     private class CPU {
         private int accumulator, instructionPointer, memoryBase;
 
-        public void incrementIP(int val) {
+        void incrementIP(int val) {
             instructionPointer += val;
         }
     }

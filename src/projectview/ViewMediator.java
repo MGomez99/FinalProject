@@ -10,16 +10,8 @@ import java.awt.*;
 import java.util.Observable;
 
 @SuppressWarnings({"Duplicates"})
-
-public class ViewMediator extends Observable {
+class ViewMediator extends Observable {
     private MachineModel model;
-    private CodeViewPanel codeViewPanel;
-    private MemoryViewPanel memoryViewPanel1;
-    private MemoryViewPanel memoryViewPanel2;
-    private MemoryViewPanel memoryViewPanel3;
-    private ControlPanel controlPanel;
-    private ProcessorViewPanel processorPanel;
-    private MenuBarBuilder menuBuilder;
     private JFrame frame;
     private FilesManager filesManager;
     private Animator animator;
@@ -119,7 +111,7 @@ public class ViewMediator extends Observable {
     }
 
     //GETTERS AND SETTERS
-    void setModel(MachineModel model) {
+    private void setModel(MachineModel model) {
         this.model = model;
     }
 
@@ -146,13 +138,13 @@ public class ViewMediator extends Observable {
         this.animator = new Animator(this);
         this.filesManager = new FilesManager(this);
         filesManager.initialize();
-        this.codeViewPanel = new CodeViewPanel(this, model);
-        this.memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
-        this.memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE/2);
-        this.memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE/2, Memory.DATA_SIZE);
-        this.controlPanel = new ControlPanel(this);
-        this.processorPanel = new ProcessorViewPanel(this, model);
-        this.menuBuilder = new MenuBarBuilder(this);
+        CodeViewPanel codeViewPanel = new CodeViewPanel(this, model);
+        MemoryViewPanel memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
+        MemoryViewPanel memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE / 2);
+        MemoryViewPanel memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE / 2, Memory.DATA_SIZE);
+        ControlPanel controlPanel = new ControlPanel(this);
+        ProcessorViewPanel processorPanel = new ProcessorViewPanel(this, model);
+        MenuBarBuilder menuBuilder = new MenuBarBuilder(this);
         this.frame = new JFrame("Simulator");
 
         Container content = frame.getContentPane();
@@ -192,7 +184,7 @@ public class ViewMediator extends Observable {
 
     States getCurrentState(){ return model.getCurrentState();}
 
-    void setCurrentState(States currentState){
+    private void setCurrentState(States currentState) {
         if(currentState == States.PROGRAM_HALTED){
             animator.setAutoStepOn(false);
         }

@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ProcessorViewPanel implements Observer {
+class ProcessorViewPanel implements Observer {
     private MachineModel model;
     private JTextField acc = new JTextField();
     private JTextField ip = new JTextField();

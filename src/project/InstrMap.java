@@ -2,7 +2,7 @@ package project;
 
 import java.util.Map;
 
-public class InstrMap {
+class InstrMap {
 
     public static Map<String, Integer> toCode;
     public static Map<Integer, String> toMnemonic;
