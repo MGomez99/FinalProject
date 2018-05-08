@@ -319,7 +319,7 @@ public class MachineModel {
     public void step() {
         try {
             int ip = getInstructionPointer();
-            if (!(ip >= currentJob.getStartcodeIndex()) && !(ip < currentJob.getStartcodeIndex() + currentJob.getCodeSize())
+            if (!(ip >= currentJob.getStartcodeIndex()) && !(ip < currentJob.getStartcodeIndex() + currentJob.getCodeSize()))
             {
                 throw new CodeAccessException(); //TODO MAYBE WRONG
             }
