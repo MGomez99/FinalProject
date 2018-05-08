@@ -1,5 +1,6 @@
 package project;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,11 +10,14 @@ public class FullAssembler implements Assembler {
 
 	@Override
 	public int assemble(String inputFileName, String outputFileName, StringBuilder error) {
+        if (error == null) {
+            throw new IllegalArgumentException("Coding error: the error buffer is null");
+        }
 		ArrayList<String> codeLines = new ArrayList<>();
 		ArrayList<String> dataLines = new ArrayList<>();
 		int lineNumber = 0;
-		
-		try(Scanner input = new Scanner(inputFileName)) {
+
+        try (Scanner input = new Scanner(new File(inputFileName))) {
 			boolean beforeData = true;
 			String temp = input.nextLine();
 			while(beforeData) {
@@ -101,29 +105,30 @@ public class FullAssembler implements Assembler {
 			lineNumber += 1; //This is to account for the "DATA" LINE
 			for(String e: dataLines) {
 				String[] parts = e.trim().split("\\s+");
-				if(parts.length != 2) {
-					lineNumber += 1;
-					throw new Exception();
-					}
-					try {
-						int address = Integer.parseInt(parts[0], 16);
-						int value = Integer.parseInt(parts[1], 16);
-					} catch (NumberFormatException c){
-						error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
-					}
+				
+                //Not in hex
+                try {
+                    int address = Integer.parseInt(parts[0], 16);
+                    int value = Integer.parseInt(parts[1], 16);
+                } catch (NumberFormatException c) {
+                    error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
+                }
 			}
-			SimpleAssembler noError = new SimpleAssembler();
-			return noError.assemble(inputFileName, outputFileName, error);
+            if (error.length() == 0) {
+                SimpleAssembler noError = new SimpleAssembler();
+                return noError.assemble(inputFileName, outputFileName, error);
+            } else {
+                System.out.println(error);
+                return -1;
+            }
+
 		}
 		catch (FileNotFoundException e) {
 			error.append("\nError: Unable to write the assembled program to the output file");
 			return -1;
 		}
-		catch (IOException e) {
-			error.append("\nUnexplained IO Exception");
-			return -1;
-		}
-	}
+
+    }
 	
     public static void main(String[] args) {
         StringBuilder error = new StringBuilder();
