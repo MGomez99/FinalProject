@@ -15,22 +15,34 @@ public class FullAssembler implements Assembler {
 			boolean beforeData = true;
 			String temp = input.nextLine();
 			while(beforeData) {
-				if(temp == "DATA") {
+				if(temp.trim().toUpperCase().equals("DATA")) {
 					beforeData = false;
+					temp = input.nextLine();
+				}
+				if(!temp.trim().equals("DATA")) {
+					throw new Exception();
+				}
+				if(temp == "") {
+					throw new Exception();
 				}
 				else {
 					codeLines.add(temp);
 					temp = input.nextLine();
 				}
 			}
-			while (beforeData == false && temp != "") {
-				if(temp == "DATA") {
-					temp = input.nextLine();
+			while (beforeData == false && input.hasNextLine()) {
+				if(temp.trim().toUpperCase() == "DATA") {
+					throw new Exception();
+				}
+				if(temp.equals("") && input.hasNextLine()) {
+					throw new Exception();
 				}
 				else {
 					dataLines.add(temp);
 					temp = input.nextLine();
 				}
+				
+				
 			}
 		}
 	}
