@@ -30,8 +30,8 @@ public class FullAssembler implements Assembler {
 					temp = input.nextLine();
 				}
 			}
-			while (beforeData == false && input.hasNextLine()) {
-				if(temp.trim().toUpperCase() == "DATA") {
+			while (!beforeData && input.hasNextLine()) {
+				if(temp.trim().toUpperCase().equals("DATA")) {
 					throw new Exception();
 				}
 				if(temp.equals("") && input.hasNextLine()) {
