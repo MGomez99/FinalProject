@@ -1,6 +1,7 @@
 package projectview;
 
 import project.Assembler;
+import project.FullAssembler;
 import project.Job;
 import project.Loader;
 import project.MachineModel;
@@ -9,7 +10,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.Properties;
-
+@SuppressWarnings("Duplicates")
 public class FilesManager {
 
     private ViewMediator view;
@@ -168,7 +169,6 @@ public class FilesManager {
         }
     }
 
-    @SuppressWarnings("Duplicates")
     public void loadFile(Job job) {
         JFileChooser chooser = new JFileChooser(executableDir);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(

@@ -376,5 +376,10 @@ public class MachineModel {
         return memory.getChangedIndex();
     }
 
+    public States getCurrentState() { return currentJob.getCurrentState();}
+
+    public void setCurrentState(States currentState){ currentJob.setCurrentState(currentState);}
+
+
 
 }
