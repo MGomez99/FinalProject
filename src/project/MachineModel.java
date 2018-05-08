@@ -94,7 +94,7 @@ public class MachineModel {
 
         //JUMPI
         INSTRUCTIONS.put(8, arg -> {
-            cpu.instructionPointer = arg;
+            cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
         });
 
         //JUMPZR
@@ -117,11 +117,10 @@ public class MachineModel {
 
         //JMPZI
         INSTRUCTIONS.put(0xB, arg -> {
-            if (cpu.accumulator == 0) {
-                cpu.instructionPointer = arg;
-            } else {
+            if (cpu.accumulator == 0)
+                cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
+            else
                 cpu.incrementIP(1);
-            }
         });
 
         //SUBI

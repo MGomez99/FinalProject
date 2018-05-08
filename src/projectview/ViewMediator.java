@@ -22,7 +22,7 @@ public class ViewMediator extends Observable {
         this.model = model;
     }
 
-    public JFrame gtFrame() {
+    public JFrame getFrame() {
         return this.frame;
     }
 
