@@ -103,14 +103,13 @@ public class FullAssembler implements Assembler {
 				}
 			}
 			lineNumber += 1; //This is to account for the "DATA" LINE
-			for(String e: dataLines) {
-				String[] parts = e.trim().split("\\s+");
-				
+            for (String s : dataLines) {
+                String[] parts = s.trim().split("\\s+");
                 //Not in hex
                 try {
                     int address = Integer.parseInt(parts[0], 16);
                     int value = Integer.parseInt(parts[1], 16);
-                } catch (NumberFormatException c) {
+                } catch (NumberFormatException e) {
                     error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
                 }
 			}
