@@ -11,6 +11,8 @@ public class FullAssembler implements Assembler {
 	public int assemble(String inputFileName, String outputFileName, StringBuilder error) {
 		ArrayList<String> codeLines = new ArrayList<>();
 		ArrayList<String> dataLines = new ArrayList<>();
+		ArrayList<String> errors = new ArrayList<>();
+		ArrayList<Integer> lineNumbers = new ArrayList<>();
 		int lineNumber = 0;
 		
 		try(Scanner input = new Scanner(inputFileName)) {
@@ -112,33 +114,44 @@ public class FullAssembler implements Assembler {
 						error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
 					}
 			}
+			SimpleAssembler noError = new SimpleAssembler();
+			return noError.assemble(inputFileName, outputFileName, error);
 		}
 		catch(IllegalDataException e) {
 			error.append("\nLine does not have DATA in upper case");
+			return lineNumber;
 		}
 		catch(IllegalBlankLineException e) {
 			error.append("\nIllegal blank line in the source file");
+			return lineNumber;
 		}
 		catch(IllegalWhiteSpaceException e) {
 			error.append("\nLine starts with illegal white space");
+			return lineNumber;
 		}
 		catch(ExtraDataException e) {
 			error.append("\nLine has DATA when a previous line already has DATA");
+			return lineNumber;
 		}
 		catch(IllegalMnemonicException e) {
 			error.append("\nError on line " + lineNumber + ": illegal mnemonic");
+			return lineNumber;
 		}
 		catch(MnemonicMustBeUpperCaseException e) {
 			error.append("\nError on line " + lineNumber + ": mnemonic must be upper case");
+			return lineNumber;
 		}
 		catch(NoArgumentsExcpetion e) {
 			error.append("\nError on line " + lineNumber + ": this mnemonic cannot take arguments");
+			return lineNumber;
 		}
 		catch(ToManyArgumentsException e) {
 			error.append("\nError on line " + lineNumber + ": this mnemonic has too many arguments");
+			return lineNumber;
 		}
 		catch(MissingArguementsException e) {
 			error.append("\nError on line " + lineNumber + ": this mnemonic is missing an argument");
+			return lineNumber;
 		}
 		catch (FileNotFoundException e) {
 			error.append("\nError: Unable to write the assembled program to the output file");
