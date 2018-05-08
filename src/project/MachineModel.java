@@ -364,5 +364,13 @@ public class MachineModel {
         }
     }
 
+    String getHex(int i) {
+        return memory.getHex(i);
+    }
+
+    String getDecimal(int i) {
+        return memory.getDecimal(i);
+    }
+
 
 }
