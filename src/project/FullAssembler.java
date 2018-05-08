@@ -11,8 +11,6 @@ public class FullAssembler implements Assembler {
 	public int assemble(String inputFileName, String outputFileName, StringBuilder error) {
 		ArrayList<String> codeLines = new ArrayList<>();
 		ArrayList<String> dataLines = new ArrayList<>();
-		ArrayList<String> errors = new ArrayList<>();
-		ArrayList<Integer> lineNumbers = new ArrayList<>();
 		int lineNumber = 0;
 		
 		try(Scanner input = new Scanner(inputFileName)) {
@@ -25,18 +23,18 @@ public class FullAssembler implements Assembler {
 					lineNumber += 1;
 				}
 				if(!temp.trim().equals("DATA")) {
-					throw new IllegalDataException();
+					error.append("\nLine does not have DATA in upper case");
 				}
 				if(temp.trim().length() == 0 && input.hasNextLine()) {
 					temp = input.nextLine();
 					lineNumber += 1;
-					throw new IllegalBlankLineException();
+					error.append("\nIllegal blank line in the source file");
 				}
 				if(temp.charAt(0) == ' ' || temp.charAt(0) == '\t') {
 					codeLines.add(temp.trim());
 					temp = input.nextLine();
 					lineNumber += 1;
-					throw new IllegalWhiteSpaceException();
+					error.append("\nLine starts with illegal white space");
 				}
 				else {
 					codeLines.add(temp);
@@ -46,18 +44,18 @@ public class FullAssembler implements Assembler {
 			}
 			while (input.hasNextLine()) {
 				if(temp.trim().toUpperCase().equals("DATA")) {
-					throw new ExtraDataException();
+					error.append("\nLine" + lineNumber + "has DATA when a previous line already has DATA");
 				}
 				if(temp.charAt(0) == ' ' || temp.charAt(0) == '\t') {
 					dataLines.add(temp.trim());
 					temp = input.nextLine();
 					lineNumber += 1;
-					throw new IllegalWhiteSpaceException();
+					error.append("\nLine starts with illegal white space");
 				}
 				if(temp.trim().length() == 0 && input.hasNextLine()) {
 					temp = input.nextLine();
 					lineNumber += 1;
-					throw new IllegalBlankLineException();
+					error.append("\nIllegal blank line in the source file");
 				}
 				else {
 					dataLines.add(temp);
@@ -72,31 +70,31 @@ public class FullAssembler implements Assembler {
 				String[] parts = e.trim().split("\\s+");
 				if(!InstrMap.toCode.keySet().contains(parts[0])) {
 					lineNumber += 1;
-					throw new IllegalMnemonicException();
+					error.append("\nError on line " + lineNumber + ": illegal mnemonic");
 				}
 				if(InstrMap.toCode.keySet().contains(parts[0].toUpperCase()) && !InstrMap.toCode.keySet().contains(parts[0])) {
 					lineNumber += 1;
-					throw new MnemonicMustBeUpperCaseException();
+					error.append("\nError on line " + lineNumber + ": mnemonic must be upper case");
 				}
 				if(Assembler.noArgument.contains(parts[0])) {
 					if(parts.length != 1) {
 						lineNumber += 1;
-						throw new NoArgumentsExcpetion();
+						error.append("\nError on line " + lineNumber + ": this mnemonic cannot take arguments");
 					}
 				}
 				if(!Assembler.noArgument.contains(parts[0])) {
 					if(parts.length > 2) {
 						lineNumber += 1;
-						throw new ToManyArgumentsException();
+						error.append("\nError on line " + lineNumber + ": this mnemonic has too many arguments");
 					}
 					if(parts.length < 2) {
 						lineNumber += 1;
-						throw new MissingArgumentsException();
+						error.append("\nError on line " + lineNumber + ": this mnemonic is missing an argument");
 					}
 				}
 				try{
 				int arg = Integer.parseInt(parts[1], 16);
-				} catch(NumberFormatException e) {
+				} catch(NumberFormatException b) {
 					error.append("\nError on line " + (lineNumber) + ": argument is not a hex number");
 				}
 			}
@@ -110,48 +108,12 @@ public class FullAssembler implements Assembler {
 					try {
 						int address = Integer.parseInt(parts[0], 16);
 						int value = Integer.parseInt(parts[1], 16);
-					} catch (NumberFormatException e){
+					} catch (NumberFormatException c){
 						error.append("\nError on line " + (lineNumber) + ": data has non-numeric memory address");
 					}
 			}
 			SimpleAssembler noError = new SimpleAssembler();
 			return noError.assemble(inputFileName, outputFileName, error);
-		}
-		catch(IllegalDataException e) {
-			error.append("\nLine does not have DATA in upper case");
-			return lineNumber;
-		}
-		catch(IllegalBlankLineException e) {
-			error.append("\nIllegal blank line in the source file");
-			return lineNumber;
-		}
-		catch(IllegalWhiteSpaceException e) {
-			error.append("\nLine starts with illegal white space");
-			return lineNumber;
-		}
-		catch(ExtraDataException e) {
-			error.append("\nLine has DATA when a previous line already has DATA");
-			return lineNumber;
-		}
-		catch(IllegalMnemonicException e) {
-			error.append("\nError on line " + lineNumber + ": illegal mnemonic");
-			return lineNumber;
-		}
-		catch(MnemonicMustBeUpperCaseException e) {
-			error.append("\nError on line " + lineNumber + ": mnemonic must be upper case");
-			return lineNumber;
-		}
-		catch(NoArgumentsExcpetion e) {
-			error.append("\nError on line " + lineNumber + ": this mnemonic cannot take arguments");
-			return lineNumber;
-		}
-		catch(ToManyArgumentsException e) {
-			error.append("\nError on line " + lineNumber + ": this mnemonic has too many arguments");
-			return lineNumber;
-		}
-		catch(MissingArguementsException e) {
-			error.append("\nError on line " + lineNumber + ": this mnemonic is missing an argument");
-			return lineNumber;
 		}
 		catch (FileNotFoundException e) {
 			error.append("\nError: Unable to write the assembled program to the output file");
