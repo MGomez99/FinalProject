@@ -3,8 +3,8 @@ package projectview;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Observer;
 import java.util.Observable;
+import java.util.Observer;
 
 class MenuBarBuilder implements Observer {
     private JMenuItem assemble = new JMenuItem("Assemble Source...");
@@ -16,9 +16,11 @@ class MenuBarBuilder implements Observer {
     private ViewMediator view;
 
     public MenuBarBuilder(ViewMediator gui) {
-        view = gui; gui.addObserver(this);
+        view = gui;
+        gui.addObserver(this);
     }
-    JMenu createFileMenu(){
+
+    JMenu createFileMenu() {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
 
@@ -44,7 +46,8 @@ class MenuBarBuilder implements Observer {
 
         return menu;
     }
-    JMenu createExecuteMenu(){
+
+    JMenu createExecuteMenu() {
         JMenu menu = new JMenu("Execute");
         menu.setMnemonic(KeyEvent.VK_X);
 
