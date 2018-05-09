@@ -54,6 +54,8 @@ public class SimpleAssembler implements Assembler {
             System.out.println("false List " + lists.get(false)); // for checking the code
         } catch (IOException e) {
             error.append("\nUnexplained IO Exception");
+            System.out.println(error);
+            e.printStackTrace();
             return -1;
         }
         lists.get(false).remove("DATA");
@@ -73,8 +75,12 @@ public class SimpleAssembler implements Assembler {
             output.println(-1); // signal for the "DATA" separating code and data
             output.println(0); // filler for the 2-line pattern
             for (String s : outputData) output.println(s);
+
         } catch (FileNotFoundException e) {
             error.append("\nError: Unable to write the assembled program to the output file");
+            System.out.println(error);
+
+            e.printStackTrace();
             return -1;
         }
 
