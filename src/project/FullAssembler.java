@@ -4,7 +4,6 @@ package project;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FullAssembler implements Assembler {
@@ -16,12 +15,10 @@ public class FullAssembler implements Assembler {
 
 	@Override
 	public int assemble(String inputFileName, String outputFileName, StringBuilder error) {
-		if (error.equals(null)) {
-			throw new IllegalArgumentException("Error Buffer cannot be Null");
+		if (error == null) {
+			throw new IllegalArgumentException("Error: Buffer cannot be Null");
 		}
 		File file = new File(inputFileName);
-		ArrayList<String> code = new ArrayList<>();
-		ArrayList<String> data = new ArrayList<>();
 		try {
 			Scanner input = new Scanner(file);
 			while (input.hasNextLine()) {
@@ -37,57 +34,62 @@ public class FullAssembler implements Assembler {
 					continue;
 				}
 				if (hasBlank && line.trim().length() != 0) {
-					error.append("Illegal blank line found at " + firstBlank + "\n");
+					error.append("\nError on line " + firstBlank +
+							": Illegal blank line in the source file");
 					retval = firstBlank;
 					hasBlank = false;
 				}
 				if ((Character.toString(line.charAt(0)).equals(" ") || Character.toString(line.charAt(0)).equals("\t"))) {
-					error.append("Line " + lineNumber + " starts with illegal white space" + "\n");
+					error.append("\nError on line " + lineNumber +
+							": Illegal white space");
 					retval = lineNumber;
 				}
 				if (line.trim().toUpperCase().equals("DATA") && readingCode) {
 					if (!line.trim().equals("DATA")) {
-						error.append("DATA must be uppercase at Line " + lineNumber + "\n");
+						error.append("\nError on line " + lineNumber +
+								": Data must be UPPERCASE");
 						retval = lineNumber;
 					}
 					readingCode = false;
 					continue;
 				}
 				if (line.trim().toUpperCase().equals("DATA") && !readingCode) {
-					error.append("Illegal DATA tag at Line " + lineNumber + "\n");
+					error.append("\nError on line " + lineNumber +
+							": There can only be one data segment");
 					retval = lineNumber;
 				}
 				if (!InstrMap.toCode.keySet().contains(parts[0].toUpperCase()) && readingCode) {
-					error.append("\nError on line " + lineNumber + ": illegal mnemonic" + parts[0]);
+					error.append("\nError on line " + lineNumber + ": Illegal mnemonic");
 					retval = lineNumber;
 				}
-				if (!InstrMap.toCode.keySet().contains(parts[0]) && readingCode && InstrMap.toCode.keySet().contains(parts[0].toUpperCase())) {
-					error.append("\nError on line " + lineNumber + ": mnemonic must be upper case");
+				if (!InstrMap.toCode.keySet().contains(parts[0]) &&
+						readingCode && InstrMap.toCode.keySet().contains(parts[0].toUpperCase())) {
+					error.append("\nError on line " + lineNumber + ": Mnemonic must be upper case");
 					retval = lineNumber;
 				}
 				if (Assembler.noArgument.contains(parts[0]) && (parts.length != 1 && readingCode)) {
-					error.append("\nError on line " + lineNumber + ": this mnemonic cannot take arguments");
+					error.append("\nError on line " + lineNumber + ": This mnemonic cannot take arguments");
 					retval = lineNumber;
 				}
 				if (!Assembler.noArgument.contains(parts[0]) && (parts.length != 2 && readingCode)) {
 					if ((parts.length > 2)) {
-						error.append("Mnemonic on Line " + lineNumber + " has too many arguments" + "\n");
+						error.append("\nError on line " + lineNumber + ": This mnemonic has too many arguments");
 						retval = lineNumber;
 					}
 					if ((parts.length < 2)) {
-						error.append("Mnemonic on Line " + lineNumber + " has too few arguments" + "\n");
+						error.append("\nError on line " + lineNumber + ": This mnemonic is missing an argument");
 						retval = lineNumber;
 					}
 				}
 				if (!readingCode && parts.length != 2) {
-					error.append("Data at Line " + lineNumber + " must have address and value" + "\n");
+					error.append("\nError on line " + lineNumber + ": Data must have and address and a value");
 				}
 				if (!readingCode) {
 					try {
 						Integer.parseInt(parts[0], 16);
 					} catch (NumberFormatException e) {
 						error.append("\nError on line " + lineNumber +
-								": address is not a hex number");
+								": Memory address is not a hex number");
 						retval = lineNumber;
 					}
 					if (parts.length > 1) {
@@ -95,7 +97,7 @@ public class FullAssembler implements Assembler {
 							Integer.parseInt(parts[1], 16);
 						} catch (NumberFormatException e) {
 							error.append("\nError on line " + lineNumber +
-									": value must be a hex number");
+									": Value must be a hex number");
 							retval = lineNumber;
 						}
 					}
@@ -105,16 +107,12 @@ public class FullAssembler implements Assembler {
 							Integer.parseInt(parts[1], 16);
 						} catch (NumberFormatException e) {
 							error.append("\nError on line " + lineNumber +
-									": argument must be a hex number");
+									": Argument must be a hex number");
 							retval = lineNumber;
 						}
 					}
 				}
-				if (readingCode) {
-					code.add(line);
-				} else {
-					data.add(line);
-				}
+
 			}
 			input.close();
 		} catch (FileNotFoundException e) {

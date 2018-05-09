@@ -7,31 +7,25 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.Properties;
 
-@SuppressWarnings("Duplicates")
-class FilesManager {
-
+public class FilesManager {
 	private ViewMediator view;
-
 	private MachineModel model; // imported from project
-
 	private String defaultDir; //this is Eclipse's default directory
-
 	private String sourceDir; // stored directory for pasm source files
-
 	private String executableDir; // stored directory for pexe assembled files
 	private Properties properties = null; // Java method for persistent program properties
 	private File currentlyExecutingFile = null;
 
 	public FilesManager(ViewMediator view) {
 		this.view = view;
-		this.model = view.getModel();
+		model = view.getModel();
+
 	}
 
 	public void initialize() {
 		locateDefaultDirectory();
 		loadPropertiesFile();
 	}
-
 	private void locateDefaultDirectory() {
 		//CODE TO DISCOVER THE ECLIPSE DEFAULT DIRECTORY:
 		File temp = new File("propertyfile.txt");
@@ -54,7 +48,7 @@ class FilesManager {
 		defaultDir = defaultDir.substring(0, lastSlash + 1);
 	}
 
-	private void loadPropertiesFile() {
+	void loadPropertiesFile() {
 		try { // load properties file "propertyfile.txt", if it exists
 			properties = new Properties();
 			properties.load(new FileInputStream("propertyfile.txt"));
@@ -75,7 +69,6 @@ class FilesManager {
 			executableDir = defaultDir;
 		}
 	}
-
 	/**
 	 * Translate method reads a source "pasm" file and saves the
 	 * file with the extension "pexe" by collecting the input and output
@@ -165,7 +158,6 @@ class FilesManager {
 					JOptionPane.OK_OPTION);
 		}
 	}
-
 	public void loadFile(Job job) {
 		JFileChooser chooser = new JFileChooser(executableDir);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -182,7 +174,7 @@ class FilesManager {
 			executableDir = executableDir.replace('\\', '/');
 			int lastSlash = executableDir.lastIndexOf('/');
 			executableDir = executableDir.substring(0, lastSlash + 1);
-			try {//copied
+			try {
 				properties.setProperty("SourceDirectory", sourceDir);
 				properties.setProperty("ExecutableDirectory", executableDir);
 				properties.store(new FileOutputStream("propertyfile.txt"),
@@ -193,7 +185,6 @@ class FilesManager {
 		}
 		finalLoad_ReloadStep(job);
 	}
-
 	void finalLoad_ReloadStep(Job job) {
 		view.clearJob();
 		String str = Loader.load(model, currentlyExecutingFile,
@@ -213,4 +204,5 @@ class FilesManager {
 					JOptionPane.OK_OPTION);
 		}
 	}
+
 }

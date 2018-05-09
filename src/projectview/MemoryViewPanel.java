@@ -11,24 +11,25 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-
-class MemoryViewPanel implements Observer {
+@SuppressWarnings("deprecation")
+public class MemoryViewPanel implements Observer {
+	private MachineModel model;
+	private JScrollPane scroller;
 	private JTextField[] dataHex;
 	private JTextField[] dataDecimal;
 	private int lower = -1;
 	private int upper = -1;
 	private int previousColor = -1;
-	private MachineModel model;
-	private JScrollPane scroller;
 
 	public MemoryViewPanel(ViewMediator gui, MachineModel mdl, int lwr, int upr) {
 		this.model = mdl;
 		this.lower = lwr;
 		this.upper = upr;
 		gui.addObserver(this);
+
 	}
 
-	public static void main(String[] args) {//TODO Try test
+	public static void main(String[] args) {
 		ViewMediator view = new ViewMediator();
 		MachineModel model = new MachineModel();
 		MemoryViewPanel panel = new MemoryViewPanel(view, model, 0, 500);
@@ -53,19 +54,16 @@ class MemoryViewPanel implements Observer {
 		JPanel innerPanel = new JPanel();
 		innerPanel.setLayout(new BorderLayout());
 		JPanel numPanel = new JPanel();
-		numPanel.setLayout(new GridLayout(0, 1));
 		JPanel decimalPanel = new JPanel();
-		decimalPanel.setLayout(new GridLayout(0, 1));
 		JPanel hexPanel = new JPanel();
+		numPanel.setLayout(new GridLayout(0, 1));
+		decimalPanel.setLayout(new GridLayout(0, 1));
 		hexPanel.setLayout(new GridLayout(0, 1));
-
 		innerPanel.add(numPanel, BorderLayout.LINE_START);
 		innerPanel.add(decimalPanel, BorderLayout.CENTER);
 		innerPanel.add(hexPanel, BorderLayout.LINE_END);
-
 		dataHex = new JTextField[upper - lower];
 		dataDecimal = new JTextField[upper - lower];
-
 		for (int i = lower; i < upper; i++) {
 			numPanel.add(new JLabel(i + ": ", JLabel.RIGHT));
 			dataDecimal[i - lower] = new JTextField(10);
@@ -76,7 +74,6 @@ class MemoryViewPanel implements Observer {
 		scroller = new JScrollPane(innerPanel);
 		panel.add(scroller);
 		return panel;
-
 	}
 
 	@Override
@@ -84,32 +81,37 @@ class MemoryViewPanel implements Observer {
 		for (int i = lower; i < upper; i++) {
 			dataDecimal[i - lower].setText("" + model.getData(i));
 			dataHex[i - lower].setText(Integer.toHexString(model.getData(i)));
-		}
-		if (arg1 != null && arg1.equals("Clear")) {
-			if (lower <= previousColor && previousColor < upper) {
-				dataDecimal[previousColor - lower].setText("0");
-				dataHex[previousColor - lower].setText("0");
-				dataDecimal[previousColor - lower].setBackground(Color.WHITE);
-				dataHex[previousColor - lower].setBackground(Color.WHITE);
-				previousColor = -1;
+			if (arg1 != null && arg1.equals("Clear")) {
+				if (lower <= previousColor && previousColor < upper) {
+					dataDecimal[previousColor - lower].setText("0");
+					dataHex[previousColor - lower].setText("0");
+					dataDecimal[previousColor - lower].setBackground(Color.WHITE);
+					dataHex[previousColor - lower].setBackground(Color.WHITE);
+					previousColor = -1;
+				}
+			} else {
+				if (previousColor >= lower && previousColor < upper) {
+					dataDecimal[previousColor - lower].setBackground(Color.WHITE);
+					dataHex[previousColor - lower].setBackground(Color.WHITE);
+				}
+				previousColor = model.getChangedIndex();
+				if (previousColor >= lower && previousColor < upper) {
+					dataDecimal[previousColor - lower].setBackground(Color.YELLOW);
+					dataHex[previousColor - lower].setBackground(Color.YELLOW);
+				}
 			}
-		} else {
-			if (previousColor >= lower && previousColor < upper) {
-				dataDecimal[previousColor - lower].setBackground(Color.WHITE);
-				dataHex[previousColor - lower].setBackground(Color.WHITE);
-			}
-			previousColor = model.getChangedIndex();
-			if (previousColor >= lower && previousColor < upper) {
-				dataDecimal[previousColor - lower].setBackground(Color.YELLOW);
-				dataHex[previousColor - lower].setBackground(Color.YELLOW);
-			}
-		}
-		if (scroller != null && model != null) {
-			JScrollBar bar = scroller.getVerticalScrollBar();
-			if (model.getChangedIndex() >= lower && model.getChangedIndex() < upper && dataDecimal != null) {
-				Rectangle bounds = dataDecimal[model.getChangedIndex() - lower].getBounds();
-				bar.setValue(Math.max(0, bounds.y - 15 * bounds.height));
+			if (scroller != null && model != null) {
+				JScrollBar bar = scroller.getVerticalScrollBar();
+				if (model.getChangedIndex() >= lower &&
+						model.getChangedIndex() < upper &&
+						// the following just checks createMemoryDisplay has run
+						dataDecimal != null) {
+					Rectangle bounds = dataDecimal[model.getChangedIndex() - lower].getBounds();
+					bar.setValue(Math.max(0, bounds.y - 15 * bounds.height));
+				}
 			}
 		}
 	}
+
+
 }

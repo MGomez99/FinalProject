@@ -1,5 +1,5 @@
 package project;
 
-public interface HaltCallback {
+public interface HaltCallBack {
 	void halt();
 }

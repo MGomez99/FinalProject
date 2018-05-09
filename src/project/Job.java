@@ -10,19 +10,19 @@ public class Job {
 	private int currentAcc;
 	private States currentState;
 
-	States getCurrentState() {
+	public States getCurrentState() {
 		return currentState;
 	}
 
-	void setCurrentState(States currentState) {
+	public void setCurrentState(States currentState) {
 		this.currentState = currentState;
 	}
 
-	int getCurrentAcc() {
+	public int getCurrentAcc() {
 		return currentAcc;
 	}
 
-	void setCurrentAcc(int currentAccumulator) {
+	public void setCurrentAcc(int currentAccumulator) {
 		this.currentAcc = currentAccumulator;
 	}
 
@@ -30,7 +30,7 @@ public class Job {
 		return startcodeIndex;
 	}
 
-	void setStartcodeIndex(int startcodeIndex) {
+	public void setStartcodeIndex(int startcodeIndex) {
 		this.startcodeIndex = startcodeIndex;
 	}
 
@@ -46,19 +46,19 @@ public class Job {
 		return startmemoryIndex;
 	}
 
-	void setStartmemoryIndex(int startmemoryIndex) {
+	public void setStartmemoryIndex(int startmemoryIndex) {
 		this.startmemoryIndex = startmemoryIndex;
 	}
 
-	int getCurrentIP() {
+	public int getCurrentIP() {
 		return currentIP;
 	}
 
-	void setCurrentIP(int currentIP) {
+	public void setCurrentIP(int currentIP) {
 		this.currentIP = currentIP;
 	}
 
-	void reset() {
+	public void reset() {
 		currentState = States.NOTHING_LOADED;
 		currentAcc = 0;
 		currentIP = startcodeIndex;

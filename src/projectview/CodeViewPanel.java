@@ -1,6 +1,5 @@
 package projectview;
 
-import project.Loader;
 import project.MachineModel;
 import project.Memory;
 
@@ -8,7 +7,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,23 +19,8 @@ public class CodeViewPanel implements Observer {
 	private int previousColor = -1;
 
 	public CodeViewPanel(ViewMediator gui, MachineModel mdl) {
-		this.model = mdl;
 		gui.addObserver(this);
-	}
-
-	public static void main(String[] args) {
-		ViewMediator view = new ViewMediator();
-		MachineModel model = new MachineModel();
-		CodeViewPanel panel = new CodeViewPanel(view, model);
-		JFrame frame = new JFrame("TEST");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(400, 700);
-		frame.setLocationRelativeTo(null);
-		frame.add(panel.createCodeDisplay());
-		frame.setVisible(true);
-		String str = Loader.load(model, new File("large.pexe"), 0, 0);
-		model.getCurrentJob().setCodeSize(Integer.parseInt(str));
-		panel.update(view, "Load Code");
+		this.model = mdl;
 	}
 
 	public JComponent createCodeDisplay() {
@@ -49,18 +32,17 @@ public class CodeViewPanel implements Observer {
 				TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 		panel.setBorder(border);
 		JPanel innerPanel = new JPanel();
+		innerPanel.setLayout(new BorderLayout());
 		JPanel numPanel = new JPanel();
-		numPanel.setLayout(new GridLayout(0, 1));
 		JPanel decimalPanel = new JPanel();
-		decimalPanel.setLayout(new GridLayout(0, 1));
 		JPanel hexPanel = new JPanel();
+		numPanel.setLayout(new GridLayout(0, 1));
+		decimalPanel.setLayout(new GridLayout(0, 1));
 		hexPanel.setLayout(new GridLayout(0, 1));
-
 		innerPanel.add(numPanel, BorderLayout.LINE_START);
 		innerPanel.add(decimalPanel, BorderLayout.CENTER);
 		innerPanel.add(hexPanel, BorderLayout.LINE_END);
-
-		for (int i = 0; i < Memory.CODE_MAX / 2; i++) { //Did he mean memory?
+		for (int i = 0; i < Memory.CODE_MAX / 2; i++) {
 			numPanel.add(new JLabel(i + ": ", JLabel.RIGHT));
 			codeDecimal[i] = new JTextField(10);
 			codeHex[i] = new JTextField(10);
@@ -70,7 +52,6 @@ public class CodeViewPanel implements Observer {
 		scroller = new JScrollPane(innerPanel);
 		panel.add(scroller);
 		return panel;
-
 	}
 
 	@Override
@@ -91,7 +72,7 @@ public class CodeViewPanel implements Observer {
 			int offset = model.getCurrentJob().getStartcodeIndex();
 			for (int i = offset;
 			     i < offset + model.getCurrentJob().getCodeSize(); i++) {
-				if (model == null) {
+				if (model != null) {
 					codeHex[i].setText("");
 					codeDecimal[i].setText("");
 				} else {
@@ -117,12 +98,13 @@ public class CodeViewPanel implements Observer {
 
 		if (scroller != null && model != null && model != null) {
 			JScrollBar bar = scroller.getVerticalScrollBar();
-			int pc = model.getInstructionPointer();
-			//CHANGE
-			if (pc > 0 && pc < Memory.CODE_MAX && codeHex[pc] != null) {
-				Rectangle bounds = codeHex[pc].getBounds();
+			int PC = model.getInstructionPointer();
+
+			if (PC > 0 && PC < Memory.CODE_MAX && codeHex[PC] != null) {
+				Rectangle bounds = codeHex[PC].getBounds();
 				bar.setValue(Math.max(0, bounds.y - 15 * bounds.height));
 			}
 		}
 	}
+
 }

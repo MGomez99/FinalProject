@@ -9,7 +9,7 @@ public class MachineModel {
 	public static final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap<>();
 	private CPU cpu = new CPU();
 	private Memory mem = new Memory();
-	private HaltCallback callback;
+	private HaltCallBack callback;
 	private boolean withGUI;
 	private Job[] jobs = new Job[2];
 	private Job currentJob;
@@ -18,7 +18,7 @@ public class MachineModel {
 		this(false, null);
 	}
 
-	public MachineModel(boolean GUI, HaltCallback HCF) {
+	public MachineModel(boolean GUI, HaltCallBack HCF) {
 		this.withGUI = GUI;
 		this.callback = HCF;
 
@@ -201,9 +201,9 @@ public class MachineModel {
 
 		INSTRUCTIONS.put(0x1A, arg -> {
 			if (cpu.accumulator != 0) {
-				cpu.accumulator = 1;
-			} else if (cpu.accumulator == 0) {
 				cpu.accumulator = 0;
+			} else {
+				cpu.accumulator = 1;
 			}
 			cpu.incrementIP();
 		});
@@ -243,6 +243,7 @@ public class MachineModel {
 		jobs[0].setStartcodeIndex(0);
 		jobs[0].setStartmemoryIndex(0);
 		jobs[0].setCurrentState(States.NOTHING_LOADED);
+
 		jobs[1].setStartcodeIndex(Memory.CODE_MAX / 4);
 		jobs[1].setStartmemoryIndex(Memory.DATA_SIZE / 2);
 		jobs[1].setCurrentState(States.NOTHING_LOADED);
@@ -284,6 +285,14 @@ public class MachineModel {
 		mem.setData(index, value);
 	}
 
+	public int getOp(int i) {
+		return mem.getOp(i);
+	}
+
+	public int getArg(int i) {
+		return mem.getArg(i);
+	}
+
 	public void setCode(int index, int op, int arg) {
 		mem.setCode(index, op, arg);
 	}
@@ -304,6 +313,14 @@ public class MachineModel {
 		return mem.getDecimal(i);
 	}
 
+	public int getInstructionPointer() {
+		return cpu.instructionPointer;
+	}
+
+	public void setInstructionPointer(int i) {
+		cpu.instructionPointer = i;
+	}
+
 	public int getAccumulator() {
 		return cpu.accumulator;
 	}
@@ -320,6 +337,10 @@ public class MachineModel {
 		cpu.memoryBase = i;
 	}
 
+	public Instruction get(int key) {
+		return INSTRUCTIONS.get(key);
+	}
+
 	public void step() {
 		try {
 			int ip = getInstructionPointer();
@@ -333,26 +354,6 @@ public class MachineModel {
 		}
 	}
 
-	public int getInstructionPointer() {
-		return cpu.instructionPointer;
-	}
-
-	public void setInstructionPointer(int i) {
-		cpu.instructionPointer = i;
-	}
-
-	public Instruction get(int key) {
-		return INSTRUCTIONS.get(key);
-	}
-
-	public int getOp(int i) {
-		return mem.getOp(i);
-	}
-
-	public int getArg(int i) {
-		return mem.getArg(i);
-	}
-
 	public void clearJob() {
 		mem.clearData(currentJob.getStartmemoryIndex(), currentJob.getStartmemoryIndex() + Memory.DATA_SIZE / 2);
 		mem.clearCode(currentJob.getStartcodeIndex(), currentJob.getStartcodeIndex() + currentJob.getCodeSize());
@@ -360,7 +361,6 @@ public class MachineModel {
 		setAccumulator(0);
 		setInstructionPointer(currentJob.getStartcodeIndex());
 	}
-
 
 	private class CPU {
 		private int accumulator;

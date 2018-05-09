@@ -66,7 +66,10 @@ public class ViewMediator extends Observable {
 		bar.add(menuBuilder.createExecuteMenu());
 		bar.add(menuBuilder.createJobsMenu());
 		frame.add(center, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(WindowListenerFactory.
+				windowClosingFactory(e -> exit()));
+
 		frame.setVisible(true);
 		model.setCurrentState(States.NOTHING_LOADED);
 		animator.start();
@@ -98,7 +101,6 @@ public class ViewMediator extends Observable {
 			System.exit(0);
 		}
 	}
-
 	@SuppressWarnings("Duplicates")
 	public void step() {
 		if (model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED) {
@@ -120,6 +122,7 @@ public class ViewMediator extends Observable {
 						"Run time error",
 						JOptionPane.OK_OPTION);
 
+
 			} catch (NullPointerException e) {
 				JOptionPane.showMessageDialog(
 						frame,
@@ -127,6 +130,7 @@ public class ViewMediator extends Observable {
 								+ "Exception message: " + e.getMessage(),
 						"NullPOinterException",
 						JOptionPane.OK_OPTION);
+
 
 			} catch (IllegalArgumentException e) {
 				JOptionPane.showMessageDialog(
@@ -136,6 +140,7 @@ public class ViewMediator extends Observable {
 						"Program Error",
 						JOptionPane.OK_OPTION);
 
+
 			} catch (DivideByZeroException e) {
 				JOptionPane.showMessageDialog(
 						frame,
@@ -143,6 +148,8 @@ public class ViewMediator extends Observable {
 								+ "Exception message: " + e.getMessage(),
 						"Divide by Zero",
 						JOptionPane.OK_OPTION);
+
+
 			}
 
 
@@ -150,7 +157,6 @@ public class ViewMediator extends Observable {
 			notifyObservers();
 		}
 	}
-
 	@SuppressWarnings("Duplicates")
 	public void execute() {
 		while (model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED) {
@@ -189,6 +195,8 @@ public class ViewMediator extends Observable {
 								+ "Exception message: " + e.getMessage(),
 						"Program Error",
 						JOptionPane.OK_OPTION);
+
+
 			} catch (DivideByZeroException e) {
 				JOptionPane.showMessageDialog(
 						frame,
@@ -196,7 +204,10 @@ public class ViewMediator extends Observable {
 								+ "Exception message: " + e.getMessage(),
 						"Divide by Zero",
 						JOptionPane.OK_OPTION);
+
+
 			}
+
 
 		}
 		setChanged();

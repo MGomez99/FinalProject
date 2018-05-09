@@ -6,7 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 @SuppressWarnings("deprecation")
-class ControlPanel implements Observer {
+public class ControlPanel implements Observer {
 	private JButton stepButton = new JButton("Step");
 	private JButton clearButton = new JButton("Clear");
 	private JButton runButton = new JButton("Run/Pause");
@@ -21,6 +21,7 @@ class ControlPanel implements Observer {
 	public JComponent createControlDisplay() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1, 0));
+
 		stepButton.addActionListener(e -> view.step());
 		panel.add(stepButton);
 		clearButton.addActionListener(e -> view.clearJob());
@@ -33,7 +34,6 @@ class ControlPanel implements Observer {
 		JSlider slider = new JSlider(5, 1000);
 		slider.addChangeListener(e -> view.setPeriod(slider.getValue()));
 		panel.add(slider);
-
 		return panel;
 	}
 
@@ -45,4 +45,5 @@ class ControlPanel implements Observer {
 		reloadButton.setEnabled(view.getCurrentState().getReloadActive());
 
 	}
+
 }

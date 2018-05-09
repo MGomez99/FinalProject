@@ -11,7 +11,7 @@ import java.util.Observer;
 public class ProcessorViewPanel implements Observer {
 	private MachineModel model;
 	private JTextField acc = new JTextField();
-	private JTextField ip = new JTextField();
+	private JTextField IP = new JTextField();
 	private JTextField memB = new JTextField();
 
 	public ProcessorViewPanel(ViewMediator gui, MachineModel model) {
@@ -38,7 +38,7 @@ public class ProcessorViewPanel implements Observer {
 		panel.add(new JLabel("Accumulator: ", JLabel.RIGHT));
 		panel.add(acc);
 		panel.add(new JLabel("Instruction Pointer: ", JLabel.RIGHT));
-		panel.add(ip);
+		panel.add(IP);
 		panel.add(new JLabel("Memory Base: ", JLabel.RIGHT));
 		panel.add(memB);
 		return panel;
@@ -48,8 +48,9 @@ public class ProcessorViewPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (model != null) {
 			acc.setText("" + model.getAccumulator());
-			ip.setText("" + model.getInstructionPointer());
+			IP.setText("" + model.getInstructionPointer());
 			memB.setText("" + model.getMemoryBase());
 		}
 	}
 }
+

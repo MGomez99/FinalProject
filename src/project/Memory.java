@@ -7,6 +7,7 @@ public class Memory {
 	private int[] code = new int[CODE_MAX];
 	private int changedIndex = -1;
 
+
 	public int getData(int index) {
 		return data[index];
 	}
@@ -59,6 +60,7 @@ public class Memory {
 	}
 
 	public void setData(int index, int value) {
+		//changedIndex = index;
 		data[index] = value;
 	}
 

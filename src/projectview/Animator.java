@@ -2,38 +2,37 @@ package projectview;
 
 import javax.swing.*;
 
-class Animator {
+public class Animator {
 	private static final int TICK = 500;
 	private boolean autoStepOn = false;
 	private Timer timer;
 	private ViewMediator view;
 
-	Animator(ViewMediator view) {
+	public Animator(ViewMediator view) {
 		this.view = view;
 	}
 
-	boolean isAutoStepOn() {
-		return autoStepOn;
-	}
-
-	void setAutoStepOn(boolean autoStepOn) {
-		this.autoStepOn = autoStepOn;
-	}
-
-	void toggleAutoStep() {
+	public void toggleAutoStep() {
 		autoStepOn = !autoStepOn;
 	}
 
-	void setPeriod(int period) {
+	public void setPeriod(int period) {
 		timer.setDelay(period);
 	}
 
-	void start() {
+	public void start() {
 		timer = new Timer(TICK, e -> {
 			if (autoStepOn) view.step();
 		});
 		timer.start();
 	}
 
+	public boolean isAutoStepOn() {
+		return autoStepOn;
+	}
+
+	public void setAutoStepOn(boolean autoStepOn) {
+		this.autoStepOn = autoStepOn;
+	}
 
 }
