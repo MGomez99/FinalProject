@@ -21,51 +21,48 @@ public class MachineModel {
 	public MachineModel(boolean GUI, HaltCallBack HCF) {
 		this.withGUI = GUI;
 		this.callback = HCF;
-
+        //NOP
 		INSTRUCTIONS.put(0x0, arg -> {
 			cpu.incrementIP();
 		});
-
+        //LODI
 		INSTRUCTIONS.put(0x1, arg -> {
 			cpu.accumulator = arg;
 			cpu.incrementIP();
 		});
-
+        //LOD
 		INSTRUCTIONS.put(0x2, arg -> {
-			int arg1 = mem.getData(cpu.memoryBase + arg);
-			cpu.accumulator = arg1;
+            cpu.accumulator = mem.getData(cpu.memoryBase + arg);
 			cpu.incrementIP();
 		});
-
+        //LODN
 		INSTRUCTIONS.put(0x3, arg -> {
 			int arg1 = mem.getData(cpu.memoryBase + arg);
 			int arg2 = mem.getData(cpu.memoryBase + arg1);
 			cpu.accumulator = arg2;
 			cpu.incrementIP();
 		});
-
+        //STO
 		INSTRUCTIONS.put(0x4, arg -> {
 			mem.setData(cpu.memoryBase + arg, cpu.accumulator);
 			cpu.incrementIP();
 		});
-
+        //STON
 		INSTRUCTIONS.put(0x5, arg -> {
-			int arg1 = mem.getData(cpu.memoryBase + arg);
-			int arg2 = mem.getData(cpu.memoryBase + arg1);
-			mem.setData(arg2, arg1);
+            int val = mem.getData(cpu.memoryBase + arg);
+            mem.setData(cpu.memoryBase + val, cpu.accumulator);
 			cpu.incrementIP();
 		});
-
+        //JMPR
 		INSTRUCTIONS.put(0x6, arg -> {
 			cpu.instructionPointer += arg;
 		});
-
+        //JUMP
 		INSTRUCTIONS.put(0x7, arg -> {
-			cpu.instructionPointer += (cpu.memoryBase + arg);
+            cpu.instructionPointer += mem.getData(cpu.memoryBase + arg);
 		});
 
 		INSTRUCTIONS.put(0x8, arg -> {
-			//cpu.instructionPointer = arg;
 			cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
 		});
 
@@ -79,7 +76,7 @@ public class MachineModel {
 
 		INSTRUCTIONS.put(0xA, arg -> {
 			if (cpu.accumulator == 0) {
-				cpu.instructionPointer += (cpu.memoryBase + arg);
+                cpu.instructionPointer += mem.getData(cpu.memoryBase + arg);
 			} else {
 				cpu.incrementIP();
 			}
@@ -87,10 +84,8 @@ public class MachineModel {
 
 		INSTRUCTIONS.put(0xB, arg -> {
 			if (cpu.accumulator == 0) {
-				//cpu.instructionPointer = arg;
 				cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
 			} else {
-				//cpu.incrementIP();
 				cpu.incrementIP(1);
 			}
 		});

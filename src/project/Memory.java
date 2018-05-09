@@ -60,7 +60,6 @@ public class Memory {
 	}
 
 	public void setData(int index, int value) {
-		//changedIndex = index;
 		data[index] = value;
 	}
 
