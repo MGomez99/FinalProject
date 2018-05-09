@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("deprecation")
 public class CodeViewPanel implements Observer {
     private MachineModel model;
     private JScrollPane scroller;
@@ -35,7 +35,6 @@ public class CodeViewPanel implements Observer {
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
         panel.setBorder(border);
         JPanel innerPanel = new JPanel();
-        innerPanel.setBorder(border);
         JPanel numPanel = new JPanel();
         numPanel.setLayout(new GridLayout(0, 1));
         JPanel decimalPanel = new JPanel();
@@ -47,7 +46,7 @@ public class CodeViewPanel implements Observer {
         innerPanel.add(decimalPanel, BorderLayout.CENTER);
         innerPanel.add(hexPanel, BorderLayout.LINE_END);
 
-        for (int i = 0; i < Memory.CODE_MAX/2; i++) {
+        for (int i = 0; i < Memory.CODE_MAX / 2; i++) { //Did he mean memory?
             numPanel.add(new JLabel(i + ": ", JLabel.RIGHT));
             codeDecimal[i] = new JTextField(10);
             codeHex[i] = new JTextField(10);
@@ -64,10 +63,10 @@ public class CodeViewPanel implements Observer {
     public void update(Observable arg0, Object arg1) {
         if(arg1 != null && arg1.equals("Load Code")) {
             int offset = model.getCurrentJob().getStartcodeIndex();
-            System.out.println("CODE SIZE " +  model.getCurrentJob().getCodeSize());
+            //System.out.println("CODE SIZE " +  model.getCurrentJob().getCodeSize());
             for(int i = offset;
                 i < offset + model.getCurrentJob().getCodeSize(); i++) {
-                System.out.println("CODE SIZE " +  model.getCurrentJob().getCodeSize());
+                //System.out.println("CODE SIZE " +  model.getCurrentJob().getCodeSize());
                 codeHex[i].setText(model.getHex(i));
                 codeDecimal[i].setText(model.getDecimal(i));
             }

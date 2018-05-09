@@ -15,6 +15,12 @@ class ViewMediator extends Observable {
     private JFrame frame;
     private FilesManager filesManager;
     private Animator animator;
+    private MemoryViewPanel memoryViewPanel1;
+    private MemoryViewPanel memoryViewPanel2;
+    private MemoryViewPanel memoryViewPanel3;
+    private ControlPanel controlPanel;
+    private ProcessorViewPanel processorPanel;
+    private MenuBarBuilder menuBuilder;
 
     void step() {
         if (model.getCurrentState() != States.PROGRAM_HALTED && model.getCurrentState() != States.NOTHING_LOADED){
@@ -93,7 +99,7 @@ class ViewMediator extends Observable {
                                 + "Exception message: " + e.getMessage(),
                         "Run time error",
                         JOptionPane.OK_OPTION);
-            }catch( DivideByZeroException e) {
+            } catch (DivideByZeroException e) {
                 JOptionPane.showMessageDialog(
                         frame,
                         "DividdeByZeroException " + model.getInstructionPointer() + "\n"
@@ -139,12 +145,12 @@ class ViewMediator extends Observable {
         this.filesManager = new FilesManager(this);
         filesManager.initialize();
         CodeViewPanel codeViewPanel = new CodeViewPanel(this, model);
-        MemoryViewPanel memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
-        MemoryViewPanel memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE / 2);
-        MemoryViewPanel memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE / 2, Memory.DATA_SIZE);
-        ControlPanel controlPanel = new ControlPanel(this);
-        ProcessorViewPanel processorPanel = new ProcessorViewPanel(this, model);
-        MenuBarBuilder menuBuilder = new MenuBarBuilder(this);
+        this.memoryViewPanel1 = new MemoryViewPanel(this, model, 0, 240);
+        this.memoryViewPanel2 = new MemoryViewPanel(this, model, 240, Memory.DATA_SIZE / 2);
+        this.memoryViewPanel3 = new MemoryViewPanel(this, model, Memory.DATA_SIZE / 2, Memory.DATA_SIZE);
+        this.controlPanel = new ControlPanel(this);
+        this.processorPanel = new ProcessorViewPanel(this, model);
+        this.menuBuilder = new MenuBarBuilder(this);
         this.frame = new JFrame("Simulator");
 
         Container content = frame.getContentPane();
@@ -154,6 +160,7 @@ class ViewMediator extends Observable {
         JPanel center = new JPanel();
         center.setLayout(new GridLayout(1,3));
         frame.add(codeViewPanel.createCodeDisplay(), BorderLayout.LINE_START);
+
         center.add(memoryViewPanel1.createMemoryDisplay());
         center.add(memoryViewPanel2.createMemoryDisplay());
         center.add(memoryViewPanel3.createMemoryDisplay());
@@ -172,10 +179,11 @@ class ViewMediator extends Observable {
         frame.addWindowListener(WindowListenerFactory.
                 windowClosingFactory(e -> exit()));
         model.setCurrentState(States.NOTHING_LOADED);
+        animator.start();
         model.getCurrentState().enter();
         setChanged();
         notifyObservers();
-        animator.start();
+
         // return HERE for other setup details
         frame.setVisible(true);
 

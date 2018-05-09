@@ -5,11 +5,12 @@ import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
+@SuppressWarnings("deprecation")
 class ControlPanel implements Observer {
-    private JTextField stepButton = new JTextField("Step");
-    private JTextField clearButton = new JTextField("Clear");
-    private JTextField runButton = new JTextField("Run/Pause");
-    private JTextField reloadButton = new JTextField("Reload");
+    private JButton stepButton = new JButton("Step");
+    private JButton clearButton = new JButton("Clear");
+    private JButton runButton = new JButton("Run/Pause");
+    private JButton reloadButton = new JButton("Reload");
     private ViewMediator view;
 
     public ControlPanel(ViewMediator gui) {

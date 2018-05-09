@@ -8,27 +8,27 @@ class Animator {
     private Timer timer;
     private ViewMediator view;
 
-    public Animator(ViewMediator view) {
+    Animator(ViewMediator view) {
         this.view = view;
     }
 
-    public boolean isAutoStepOn() {
+    boolean isAutoStepOn() {
         return autoStepOn;
     }
 
-    public void setAutoStepOn(boolean autoStepOn) {
+    void setAutoStepOn(boolean autoStepOn) {
         this.autoStepOn = autoStepOn;
     }
 
-    public void toggleAutoStep() {
+    void toggleAutoStep() {
         autoStepOn = !autoStepOn;
     }
 
-    public void setPeriod(int period) {
+    void setPeriod(int period) {
         timer.setDelay(period);
     }
 
-    public void start() {
+    void start() {
         timer = new Timer(TICK, e -> {
             if (autoStepOn) view.step();
         });

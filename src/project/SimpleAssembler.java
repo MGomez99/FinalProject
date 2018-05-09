@@ -50,8 +50,8 @@ public class SimpleAssembler implements Assembler {
                     })
                     .map(line -> line.trim()) //<< CORRECTION <<<
                     .collect(Collectors.partitioningBy(line -> readingCode));
-            System.out.println("true List " + lists.get(true)); // these lines can be uncommented
-            System.out.println("false List " + lists.get(false)); // for checking the code
+            //System.out.println("true List " + lists.get(true)); // these lines can be uncommented
+            //System.out.println("false List " + lists.get(false)); // for checking the code
         } catch (IOException e) {
             error.append("\nUnexplained IO Exception");
             System.out.println(error);

@@ -61,7 +61,7 @@ class MemoryViewPanel implements Observer {
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
         panel.setBorder(border);
         JPanel innerPanel = new JPanel();
-        innerPanel.setBorder(border);
+        innerPanel.setLayout(new BorderLayout());
         JPanel numPanel = new JPanel();
         numPanel.setLayout(new GridLayout(0, 1));
         JPanel decimalPanel = new JPanel();
@@ -97,6 +97,8 @@ class MemoryViewPanel implements Observer {
         }
         if (arg1 != null && arg1.equals("Clear")) {
             if (lower <= previousColor && previousColor < upper) {
+                dataDecimal[previousColor - lower].setText("0");
+                dataHex[previousColor - lower].setText("0");
                 dataDecimal[previousColor - lower].setBackground(Color.WHITE);
                 dataHex[previousColor - lower].setBackground(Color.WHITE);
                 previousColor = -1;
@@ -114,10 +116,7 @@ class MemoryViewPanel implements Observer {
         }
         if (scroller != null && model != null) {
             JScrollBar bar = scroller.getVerticalScrollBar();
-            if (model.getChangedIndex() >= lower &&
-                    model.getChangedIndex() < upper &&
-                    // the following just checks createMemoryDisplay has run
-                    dataDecimal != null) {
+            if (model.getChangedIndex() >= lower && model.getChangedIndex() < upper && dataDecimal != null) {
                 Rectangle bounds = dataDecimal[model.getChangedIndex() - lower].getBounds();
                 bar.setValue(Math.max(0, bounds.y - 15 * bounds.height));
             }

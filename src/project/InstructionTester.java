@@ -1,16 +1,16 @@
 package project;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.Test;
+
 public class InstructionTester {
-    private MachineModel machine = new MachineModel();
-    private int[] dataCopy = new int[Memory.DATA_SIZE];
-    private int accInit;
-    private int ipInit;
+    MachineModel machine = new MachineModel();
+    int[] dataCopy = new int[Memory.DATA_SIZE];
+    int accInit;
+    int ipInit;
 
     @Before
     public void setup() {
@@ -618,7 +618,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -635,7 +635,7 @@ public class InstructionTester {
         machine.setAccumulator(10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -652,7 +652,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -669,7 +669,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -686,7 +686,7 @@ public class InstructionTester {
         machine.setAccumulator(10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -703,7 +703,7 @@ public class InstructionTester {
         machine.setAccumulator(10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -720,7 +720,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -737,7 +737,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -754,7 +754,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -771,7 +771,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -787,7 +787,7 @@ public class InstructionTester {
         int arg = 1300;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -804,7 +804,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -821,7 +821,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -837,7 +837,7 @@ public class InstructionTester {
         int arg = 200;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -853,7 +853,7 @@ public class InstructionTester {
         int arg = 1024;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -870,7 +870,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -887,7 +887,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -904,7 +904,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -920,7 +920,7 @@ public class InstructionTester {
         machine.setAccumulator(10);
         instr.execute(0);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -936,7 +936,7 @@ public class InstructionTester {
         machine.setAccumulator(0);
         instr.execute(0);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -952,7 +952,7 @@ public class InstructionTester {
         machine.setAccumulator(-10);
         instr.execute(0);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -968,7 +968,7 @@ public class InstructionTester {
         int arg = 100;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -984,7 +984,7 @@ public class InstructionTester {
         int arg = 1024;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -1000,7 +1000,7 @@ public class InstructionTester {
         int arg = 1030;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -1016,7 +1016,7 @@ public class InstructionTester {
         int arg = 100;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -1032,7 +1032,7 @@ public class InstructionTester {
         int arg = 1024;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());
@@ -1048,7 +1048,7 @@ public class InstructionTester {
         int arg = 1030;
         instr.execute(arg);
         //Test machine is not changed
-        assertArrayEquals(dataCopy, machine.getData());
+        assertArrayEquals(dataCopy, machine.getData()); 
         //Test program counter incremented
         assertEquals("Program counter incremented", ipInit + 1,
                 machine.getInstructionPointer());

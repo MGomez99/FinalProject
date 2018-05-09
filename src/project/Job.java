@@ -1,5 +1,4 @@
 package project;
-
 import projectview.States;
 
 public class Job {
@@ -10,56 +9,51 @@ public class Job {
     private int currentAcc;
     private States currentState;
 
-    public States getCurrentState() {
+    States getCurrentState() {
         return currentState;
     }
 
-    public void setCurrentState(States currentState) {
+    void setCurrentState(States currentState) {
         this.currentState = currentState;
     }
 
-    public int getCurrentAcc() {
+    int getCurrentAcc() {
         return currentAcc;
     }
 
-    public void setCurrentAcc(int currentAccumulator) {
+    void setCurrentAcc(int currentAccumulator) {
         this.currentAcc = currentAccumulator;
     }
-
     public int getStartcodeIndex() {
         return startcodeIndex;
     }
 
-    public void setStartcodeIndex(int startcodeIndex) {
+    void setStartcodeIndex(int startcodeIndex) {
         this.startcodeIndex = startcodeIndex;
     }
-
     public int getCodeSize() {
         return codeSize;
     }
-
     public void setCodeSize(int codeSize) {
         this.codeSize = codeSize;
     }
-
     public int getStartmemoryIndex() {
         return startmemoryIndex;
     }
 
-    public void setStartmemoryIndex(int startmemoryIndex) {
+    void setStartmemoryIndex(int startmemoryIndex) {
         this.startmemoryIndex = startmemoryIndex;
     }
 
-    public int getCurrentIP() {
+    int getCurrentIP() {
         return currentIP;
     }
 
-    public void setCurrentIP(int currentIP) {
+    void setCurrentIP(int currentIP) {
         this.currentIP = currentIP;
     }
 
-    public void reset() {
-        codeSize = 0;
+    void reset() {
         currentState = States.NOTHING_LOADED;
         currentAcc = 0;
         currentIP = startcodeIndex;

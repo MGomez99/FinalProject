@@ -6,390 +6,376 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class MachineModel {
-    private final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap();
-    private Job[] jobs = new Job[2]; //IS THIS PRIVATE?
+    public static final Map<Integer, Instruction> INSTRUCTIONS = new TreeMap<>();
     private CPU cpu = new CPU();
-    private Memory memory = new Memory();
+    private Memory mem = new Memory();
     private HaltCallback callback;
-    private Job currentJob;
     private boolean withGUI;
+    private Job[] jobs = new Job[2];
+    private Job currentJob;
 
     public MachineModel() {
         this(false, null);
     }
 
-    public MachineModel(boolean withGUI, HaltCallback callback) {
-        this.withGUI = withGUI;
-        this.callback = callback;
+    public MachineModel(boolean GUI, HaltCallback HCF) {
+        this.withGUI = GUI;
+        this.callback = HCF;
 
-        //INSTRUCTION_MAP entry for "ADDI"
-        INSTRUCTIONS.put(0xC, arg -> {
-            cpu.accumulator += arg;
-            cpu.incrementIP(1);
+        INSTRUCTIONS.put(0x0, arg -> {
+            cpu.incrementIP();
         });
 
-        //INSTRUCTION_MAP entry for "ADD"
-        INSTRUCTIONS.put(0xD, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            cpu.accumulator += arg1;
-            cpu.incrementIP(1);
-        });
-
-        //INSTRUCTION_MAP entry for "ADDN"
-        INSTRUCTIONS.put(0xE, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            int arg2 = memory.getData(cpu.memoryBase + arg1);
-            cpu.accumulator += arg2;
-            cpu.incrementIP(1);
-        });
-
-        //Thomas's code starts here
-        //NOP
-        INSTRUCTIONS.put(0, arg -> {
-            cpu.incrementIP(1);
-        });
-
-        //LODI
-        INSTRUCTIONS.put(1, arg -> {
+        INSTRUCTIONS.put(0x1, arg -> {
             cpu.accumulator = arg;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //LOD
-        INSTRUCTIONS.put(2, arg -> {
-            cpu.accumulator = memory.getData(cpu.memoryBase + arg);
-            cpu.incrementIP(1);
+        INSTRUCTIONS.put(0x2, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            cpu.accumulator = arg1;
+            cpu.incrementIP();
         });
 
-        //LODN
-        INSTRUCTIONS.put(3, arg -> {
-            int val = memory.getData(cpu.memoryBase + arg);
-            cpu.accumulator = memory.getData(cpu.memoryBase + val);
-            cpu.incrementIP(1);
+        INSTRUCTIONS.put(0x3, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
+            cpu.accumulator = arg2;
+            cpu.incrementIP();
         });
 
-        //STO
-        INSTRUCTIONS.put(4, arg -> {
-            memory.setData(cpu.memoryBase += arg, cpu.accumulator);
-            cpu.incrementIP(1);
+        INSTRUCTIONS.put(0x4, arg -> {
+            mem.setData(cpu.memoryBase + arg, cpu.accumulator);
+            cpu.incrementIP();
         });
 
-        //STON
-        INSTRUCTIONS.put(5, arg -> {
-            int val = memory.getData(cpu.memoryBase + arg);
-            memory.setData(cpu.memoryBase + val, cpu.accumulator);
-            cpu.incrementIP(1);
+        INSTRUCTIONS.put(0x5, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
+            mem.setData(arg2, arg1);
+            cpu.incrementIP();
         });
 
-        //JMPR
-        INSTRUCTIONS.put(6, arg -> {
+        INSTRUCTIONS.put(0x6, arg -> {
             cpu.instructionPointer += arg;
         });
 
-        //JUMP
-        INSTRUCTIONS.put(7, arg -> {
-            cpu.instructionPointer += memory.getData(cpu.memoryBase + arg);
+        INSTRUCTIONS.put(0x7, arg -> {
+            cpu.instructionPointer += (cpu.memoryBase + arg);
         });
 
-        //JUMPI
-        INSTRUCTIONS.put(8, arg -> {
+        INSTRUCTIONS.put(0x8, arg -> {
+            //cpu.instructionPointer = arg;
             cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
         });
 
-        //JUMPZR
-        INSTRUCTIONS.put(9, arg -> {
+        INSTRUCTIONS.put(0x9, arg -> {
             if (cpu.accumulator == 0) {
                 cpu.instructionPointer += arg;
             } else {
-                cpu.incrementIP(1);
+                cpu.incrementIP();
             }
         });
 
-        //JMPZ
         INSTRUCTIONS.put(0xA, arg -> {
             if (cpu.accumulator == 0) {
-                cpu.instructionPointer += memory.getData(cpu.memoryBase + arg);
+                cpu.instructionPointer += (cpu.memoryBase + arg);
             } else {
+                cpu.incrementIP();
+            }
+        });
+
+        INSTRUCTIONS.put(0xB, arg -> {
+            if (cpu.accumulator == 0) {
+                //cpu.instructionPointer = arg;
+                cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
+            } else {
+                //cpu.incrementIP();
                 cpu.incrementIP(1);
             }
         });
 
-        //JMPZI
-        INSTRUCTIONS.put(0xB, arg -> {
-            if (cpu.accumulator == 0)
-                cpu.instructionPointer = currentJob.getStartcodeIndex() + arg;
-            else
-                cpu.incrementIP(1);
+        INSTRUCTIONS.put(0xC, arg -> {
+            cpu.accumulator += arg;
+            cpu.incrementIP();
         });
 
-        //SUBI
+        INSTRUCTIONS.put(0xD, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            cpu.accumulator += arg1;
+            cpu.incrementIP();
+        });
+
+        INSTRUCTIONS.put(0xE, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
+            cpu.accumulator += arg2;
+            cpu.incrementIP();
+        });
+
         INSTRUCTIONS.put(0xF, arg -> {
             cpu.accumulator -= arg;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //SUB
         INSTRUCTIONS.put(0x10, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
             cpu.accumulator -= arg1;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //SUBN
         INSTRUCTIONS.put(0x11, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            int arg2 = memory.getData(cpu.memoryBase + arg1);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
             cpu.accumulator -= arg2;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //MULI
         INSTRUCTIONS.put(0x12, arg -> {
             cpu.accumulator *= arg;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //MUL
         INSTRUCTIONS.put(0x13, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
             cpu.accumulator *= arg1;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //MULN
         INSTRUCTIONS.put(0x14, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            int arg2 = memory.getData(cpu.memoryBase + arg1);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
             cpu.accumulator *= arg2;
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //DIVI
         INSTRUCTIONS.put(0x15, arg -> {
             if (arg == 0) {
-                throw new DivideByZeroException();
+                throw new DivideByZeroException("Cannot Divide By 0!");
+            } else {
+                cpu.accumulator /= arg;
+                cpu.incrementIP();
             }
-            cpu.accumulator /= arg;
-            cpu.incrementIP(1);
         });
 
-        //DIV
         INSTRUCTIONS.put(0x16, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
             if (arg1 == 0) {
-                throw new DivideByZeroException();
+                throw new DivideByZeroException("Cannot Divide By 0!");
+            } else {
+                cpu.accumulator /= arg1;
+                cpu.incrementIP();
             }
-            cpu.accumulator /= arg1;
-            cpu.incrementIP(1);
         });
 
-        //DIVN
         INSTRUCTIONS.put(0x17, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
-            int arg2 = memory.getData(cpu.memoryBase + arg1);
+
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            int arg2 = mem.getData(cpu.memoryBase + arg1);
             if (arg2 == 0) {
-                throw new DivideByZeroException();
+                throw new DivideByZeroException("Cannot Divide By 0!");
+            } else {
+                cpu.accumulator /= arg2;
+                cpu.incrementIP();
             }
-            cpu.accumulator /= arg2;
-            cpu.incrementIP(1);
         });
 
-        //ANDI
         INSTRUCTIONS.put(0x18, arg -> {
             if (cpu.accumulator != 0 && arg != 0) {
                 cpu.accumulator = 1;
             } else {
                 cpu.accumulator = 0;
             }
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //AND
         INSTRUCTIONS.put(0x19, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
+            int arg1 = mem.getData(cpu.memoryBase + arg);
             if (cpu.accumulator != 0 && arg1 != 0) {
                 cpu.accumulator = 1;
             } else {
                 cpu.accumulator = 0;
             }
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //NOT
         INSTRUCTIONS.put(0x1A, arg -> {
             if (cpu.accumulator != 0) {
-                cpu.accumulator = 0;
-            } else {
                 cpu.accumulator = 1;
+            } else if (cpu.accumulator == 0) {
+                cpu.accumulator = 0;
             }
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //CMPL
         INSTRUCTIONS.put(0x1B, arg -> {
-            if (getData(cpu.memoryBase + arg) < 0) {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            if (arg1 < 0) {
                 cpu.accumulator = 1;
             } else {
                 cpu.accumulator = 0;
             }
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //CMPZ
         INSTRUCTIONS.put(0x1C, arg -> {
-            if (getData(cpu.memoryBase + arg) == 0) {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
+            if (arg1 == 0) {
                 cpu.accumulator = 1;
             } else {
                 cpu.accumulator = 0;
             }
-            cpu.incrementIP(1);
+            cpu.incrementIP();
         });
 
-        //JUMPN
-        INSTRUCTIONS.put(29, arg -> {
-            int arg1 = memory.getData(cpu.memoryBase + arg);
+        INSTRUCTIONS.put(0x1D, arg -> {
+            int arg1 = mem.getData(cpu.memoryBase + arg);
             cpu.instructionPointer = currentJob.getStartcodeIndex() + arg1;
         });
 
-        //HALT
         INSTRUCTIONS.put(0x1F, arg -> {
             callback.halt();
         });
+
         jobs[0] = new Job();
         jobs[1] = new Job();
         currentJob = jobs[0];
         jobs[0].setStartcodeIndex(0);
         jobs[0].setStartmemoryIndex(0);
-        jobs[1].setStartcodeIndex(Memory.CODE_MAX / 4);
-        jobs[1].setStartmemoryIndex(Memory.DATA_SIZE / 4);
         jobs[0].setCurrentState(States.NOTHING_LOADED);
+        jobs[1].setStartcodeIndex(Memory.CODE_MAX / 4);
+        jobs[1].setStartmemoryIndex(Memory.DATA_SIZE / 2);
         jobs[1].setCurrentState(States.NOTHING_LOADED);
-
-    }
-
-    public int getAccumulator() {
-        return cpu.accumulator;
-    }
-
-    public void setAccumulator(int accumulator) {
-        this.cpu.accumulator = accumulator;
-    }
-
-    public int getInstructionPointer() {
-        return cpu.instructionPointer;
-    }
-
-    public void setInstructionPointer(int instructionPointer) {
-        this.cpu.instructionPointer = instructionPointer;
-    }
-
-    public int[] getData() {
-        return memory.getDataArray();
-    }
-
-    public int getData(int index) {
-        return memory.getData(index);
-    }
-
-    public void setData(int index, int value) {
-        memory.setData(index, value);
-    }
-
-    public Instruction get(int index) {
-        return INSTRUCTIONS.get(index);
     }
 
     public Job getCurrentJob() {
-        return this.currentJob;
+        return currentJob;
     }
 
     public void setJob(int i) {
         if (i != 0 && i != 1) {
             throw new IllegalArgumentException();
         }
+        currentJob.setCurrentAcc(cpu.accumulator);
+        currentJob.setCurrentIP(cpu.instructionPointer);
         currentJob = jobs[i];
         cpu.accumulator = currentJob.getCurrentAcc();
         cpu.instructionPointer = currentJob.getCurrentIP();
         cpu.memoryBase = currentJob.getStartmemoryIndex();
     }
 
-    public void clearJob() {
-        memory.clearData(currentJob.getStartmemoryIndex(), currentJob.getStartmemoryIndex() + Memory.DATA_SIZE / 2);
-        memory.clearCode(currentJob.getStartcodeIndex(), currentJob.getStartcodeIndex() + currentJob.getCodeSize());
-        setAccumulator(0);
-        setInstructionPointer(currentJob.getStartcodeIndex());
-        currentJob.reset();
+    public States getCurrentState() {
+        return currentJob.getCurrentState();
     }
 
-    public void step() {
-        try {
-            int ip = getInstructionPointer();
-            if (!(ip >= currentJob.getStartcodeIndex()) && !(ip < currentJob.getStartcodeIndex() + currentJob.getCodeSize()))
-            {
-                throw new CodeAccessException(); //TODO MAYBE WRONG
-            }
-            get(getOp(ip)).execute(getArg(ip));
-
-        } catch (Exception e) {
-            callback.halt();
-            throw e;
-
-        }
+    public void setCurrentState(States currentState) {
+        currentJob.setCurrentState(currentState);
     }
 
-    public void setCurrentAcc() {
-        currentJob.setCurrentAcc(cpu.accumulator);
+    public int[] getData() {
+        return mem.getData();
     }
 
-    public void setCurrentIP() {
-        currentJob.setCurrentIP(cpu.instructionPointer);
+    public int getData(int index) {
+        return mem.getData(index);
+    }
+
+    public void setData(int index, int value) {
+        mem.setData(index, value);
+    }
+
+    public int getOp(int i) {
+        return mem.getOp(i);
+    }
+
+    public int getArg(int i) {
+        return mem.getArg(i);
+    }
+
+    public void setCode(int index, int op, int arg) {
+        mem.setCode(index, op, arg);
     }
 
     public int[] getCode() {
-        return memory.getCode();
-    }
-
-    int getOp(int i) {
-        return memory.getOp(i);
-    }
-
-    int getArg(int i) {
-        return memory.getArg(i);
-    }
-
-    void setCode(int index, int op, int arg) {
-        memory.setCode(index, op, arg);
-    }
-
-    private class CPU {
-        private int accumulator, instructionPointer, memoryBase;
-
-        void incrementIP(int val) {
-            instructionPointer += val;
-        }
-    }
-
-    public String getHex(int i) {
-        return memory.getHex(i);
-    }
-
-    public String getDecimal(int i) {
-        return memory.getDecimal(i);
+        return mem.getCode();
     }
 
     public int getChangedIndex() {
-        return memory.getChangedIndex();
+        return mem.getChangedIndex();
     }
 
-    public States getCurrentState() { return currentJob.getCurrentState();}
+    public String getHex(int i) {
+        return mem.getHex(i);
+    }
 
-    public void setCurrentState(States currentState){ currentJob.setCurrentState(currentState);}
+    public String getDecimal(int i) {
+        return mem.getDecimal(i);
+    }
+
+    public int getInstructionPointer() {
+        return cpu.instructionPointer;
+    }
+
+    public void setInstructionPointer(int i) {
+        cpu.instructionPointer = i;
+    }
+
+    public int getAccumulator() {
+        return cpu.accumulator;
+    }
+
+    public void setAccumulator(int i) {
+        cpu.accumulator = i;
+    }
 
     public int getMemoryBase() {
         return cpu.memoryBase;
     }
 
+    public void setMemoryBase(int i) {
+        cpu.memoryBase = i;
+    }
+
+    public Instruction get(int key) {
+        return INSTRUCTIONS.get(key);
+    }
+
+    public void step() {
+        try {
+            int ip = getInstructionPointer();
+            if (currentJob.getStartcodeIndex() > ip || ip >= currentJob.getStartcodeIndex() + currentJob.getCodeSize()) {
+                throw new CodeAccessException();
+            }
+            get(getOp(ip)).execute(getArg(ip));
+        } catch (Exception e) {
+            callback.halt();
+            throw e;
+        }
+    }
+
+    public void clearJob() {
+        mem.clearData(currentJob.getStartmemoryIndex(), currentJob.getStartmemoryIndex() + Memory.DATA_SIZE / 2);
+        mem.clearCode(currentJob.getStartcodeIndex(), currentJob.getStartcodeIndex() + currentJob.getCodeSize());
+        currentJob.reset();
+        setAccumulator(0);
+        setInstructionPointer(currentJob.getStartcodeIndex());
+    }
 
 
+    private class CPU {
+        private int accumulator;
+        private int instructionPointer;
+        private int memoryBase;
+
+        public void incrementIP(int val) {
+            instructionPointer += val;
+        }
+
+        public void incrementIP() {
+            instructionPointer += 1;
+        }
+
+
+    }
 
 }

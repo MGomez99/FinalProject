@@ -14,7 +14,7 @@ public class FullAssembler implements Assembler {
 
     @Override
     public int assemble(String inputFileName, String outputFileName, StringBuilder error) {
-        int retval = -1;
+        int retval = 0;
         int lineNumber = 0;
         ArrayList<String> file = new ArrayList<>();
         ArrayList<String> code = new ArrayList<>();
@@ -156,9 +156,10 @@ public class FullAssembler implements Assembler {
             }
 
         }
-        if (error.length() == 0) {
-            SimpleAssembler noError = new SimpleAssembler();
-            return noError.assemble(inputFileName, outputFileName, error);
+        if (retval == 0) {
+            new SimpleAssembler().assemble(inputFileName, outputFileName, error);
+            return retval;
+
         } else {
             System.out.println(error);
             return retval;
